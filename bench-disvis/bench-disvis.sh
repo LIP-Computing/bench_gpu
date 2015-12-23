@@ -26,7 +26,6 @@ TIME_STR="time = %e sec\nMem = %M kB"
 
 # Case PRE5-PUP2-complex
 #TYPE is either -g for GPU or -p NN for CPU NN processes
-TYPE="-g"
 TAG_TYPE="GPU"
 
 INPUT_DIR=${WDIR}/"PRE5-PUP2-complex"
@@ -44,16 +43,53 @@ do
       TIME_RES="tr_${TAG}.txt"
       OUT_DIR=${WDIR}/"res_${TAG}"
       DISVIS_PAR="-a ${ANG} -vs ${VS}"
+      TYPE="-g"
       echo "-------------------------------------"
+      echo "-> Params ${PDB1} ${PDB2} ${REST}"
+      echo "-> TYPE = ${TAG_TYPE}"
+      echo "-> Run num: ${i}"
+      echo
       echo "-> Executing disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
-      #echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
-      ${TIME} -f "${TIME_STR}" -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
+      echo
+      echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+      #${TIME} -f "${TIME_STR}" -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
     done
   done
 done
 
 
+# For CPUs
 
+NCORES=`nproc`
+TAG_TYPE="CPU"
+
+for ANG in "10.0" "5.0"
+do
+  for VS in "2" "1"
+  do
+    for nc in `seq ${NCORES} -2 1` "1"
+    do
+      for i in `seq -w 10`
+      do
+        TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-ncores-${nc}-n-${i}"
+        TIME_RES="tr_${TAG}.txt"
+        OUT_DIR=${WDIR}/"res_${TAG}"
+        DISVIS_PAR="-a ${ANG} -vs ${VS}"
+        TYPE="-p ${nc}"
+        echo "-------------------------------------"
+        echo "-> Params ${PDB1} ${PDB2} ${REST}"
+        echo "-> TYPE = ${TAG_TYPE}"
+        echo "-> Num cores = ${nc}"
+        echo "-> Run num: ${i}"
+        echo
+        echo "-> Executing disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+        echo
+        echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+        #${TIME} -f "${TIME_STR}" -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
+      done
+    done
+  done
+done
 
 
 
