@@ -33,6 +33,8 @@ PDB1=${INPUT_DIR}/O14250.pdb
 PDB2=${INPUT_DIR}/Q9UT97.pdb
 REST=${INPUT_DIR}/restraints.dat
 
+echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
+
 for ANG in "10.0" "5.0"
 do
   for VS in "2" "1"
@@ -45,7 +47,7 @@ do
       DISVIS_PAR="-a ${ANG} -vs ${VS}"
       TYPE="-g"
       echo "-------------------------------------"
-      echo "-> Params ${PDB1} ${PDB2} ${REST}"
+      echo "-> Params: angle = ${ANG}  voxel spacing = ${VS}"
       echo "-> TYPE = ${TAG_TYPE}"
       echo "-> Run num: ${i}"
       echo
@@ -69,7 +71,7 @@ do
   do
     for nc in `seq ${NCORES} -2 1` "1"
     do
-      for i in `seq -w 10`
+      for i in `seq -w 2`
       do
         TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-ncores-${nc}-n-${i}"
         TIME_RES="tr_${TAG}.txt"
@@ -77,7 +79,7 @@ do
         DISVIS_PAR="-a ${ANG} -vs ${VS}"
         TYPE="-p ${nc}"
         echo "-------------------------------------"
-        echo "-> Params ${PDB1} ${PDB2} ${REST}"
+        echo "-> Params: angle = ${ANG}  voxel spacing = ${VS}"
         echo "-> TYPE = ${TAG_TYPE}"
         echo "-> Num cores = ${nc}"
         echo "-> Run num: ${i}"
@@ -90,15 +92,5 @@ do
     done
   done
 done
-
-
-
-
-
-
-
-
-
-
 
 
