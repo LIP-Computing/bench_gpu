@@ -31,12 +31,12 @@ REST=${INPUT_DIR}/restraints.dat
 
 TIME_RES="tr.txt"
 OUT_DIR=${WDIR}/"res"
-DISVIS_PAR="-a 9.72 -vs 2"
+DISVIS_PAR="-a 9.72 -vs 4"
 
 #TYPE is either -g for GPU or -p NN for CPU NN processes
 TYPE="-g"
 
-${TIME} -f ${TIME_STR} -o ${TIME_RES} \
-    disvis ${PDB1} ${PDB2} ${REST} ${TYPE} -d ${OUT_DIR}
+${TIME} -f "${TIME_STR}" -o ${TIME_RES} \
+    disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
 
 
