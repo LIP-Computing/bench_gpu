@@ -21,22 +21,44 @@
 #
 
 WDIR=`pwd`
-INPUT_DIR=${WDIR}/"PRE5-PUP2-complex"
 TIME="/usr/bin/time"
-TIME_STR="time = %e sec\n Mem = %M kB"
+TIME_STR="time = %e sec\nMem = %M kB"
+
+# Case PRE5-PUP2-complex
+#TYPE is either -g for GPU or -p NN for CPU NN processes
+TYPE="-g"
+TAG_TYPE="GPU"
+
+INPUT_DIR=${WDIR}/"PRE5-PUP2-complex"
 PDB1=${INPUT_DIR}/O14250.pdb
 PDB2=${INPUT_DIR}/Q9UT97.pdb
 REST=${INPUT_DIR}/restraints.dat
 
+for ANG in "10.0" "5.0"
+do
+  for VS in "2" "1"
+  do
+    TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}"
+    TIME_RES="tr_${TAG}.txt"
+    OUT_DIR=${WDIR}/"res_${TAG}"
+    DISVIS_PAR="-a ${ANG} -vs ${VS}"
+    #${TIME} -f "${TIME_STR}" -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
+    echo "-> Executing disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+    echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+  done
+done
 
-TIME_RES="tr.txt"
-OUT_DIR=${WDIR}/"res"
-DISVIS_PAR="-a 9.72 -vs 4"
 
-#TYPE is either -g for GPU or -p NN for CPU NN processes
-TYPE="-g"
 
-${TIME} -f "${TIME_STR}" -o ${TIME_RES} \
-    disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
+
+
+
+
+
+
+
+
+
+
 
 
