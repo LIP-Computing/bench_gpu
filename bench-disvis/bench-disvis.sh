@@ -38,13 +38,17 @@ for ANG in "10.0" "5.0"
 do
   for VS in "2" "1"
   do
-    TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}"
-    TIME_RES="tr_${TAG}.txt"
-    OUT_DIR=${WDIR}/"res_${TAG}"
-    DISVIS_PAR="-a ${ANG} -vs ${VS}"
-    #${TIME} -f "${TIME_STR}" -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
-    echo "-> Executing disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
-    echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+    for i in `seq -w 10`
+    do
+      TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-n-${i}"
+      TIME_RES="tr_${TAG}.txt"
+      OUT_DIR=${WDIR}/"res_${TAG}"
+      DISVIS_PAR="-a ${ANG} -vs ${VS}"
+      echo "-------------------------------------"
+      echo "-> Executing disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+      #echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+      ${TIME} -f "${TIME_STR}" -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
+    done
   done
 done
 
