@@ -32,6 +32,8 @@ INPUT_DIR=${WDIR}/"PRE5-PUP2-complex"
 PDB1=${INPUT_DIR}/O14250.pdb
 PDB2=${INPUT_DIR}/Q9UT97.pdb
 REST=${INPUT_DIR}/restraints.dat
+mkdir -p ${WDIR}/res
+mkdir -p ${WDIR}/time
 
 echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
 
@@ -42,8 +44,8 @@ do
     for i in `seq -w 10`
     do
       TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-n-${i}"
-      TIME_RES="tr_${TAG}.txt"
-      OUT_DIR=${WDIR}/"res_${TAG}"
+      TIME_RES=${WDIR}/time/"tr_${TAG}.txt"
+      OUT_DIR=${WDIR}/res/"res_${TAG}"
       DISVIS_PAR="-a ${ANG} -vs ${VS}"
       TYPE="-g"
       echo "-------------------------------------"
@@ -74,8 +76,8 @@ do
       for i in `seq -w 2`
       do
         TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-ncores-${nc}-n-${i}"
-        TIME_RES="tr_${TAG}.txt"
-        OUT_DIR=${WDIR}/"res_${TAG}"
+        TIME_RES=${WDIR}/time/"tr_${TAG}.txt"
+        OUT_DIR=${WDIR}/res/"res_${TAG}"
         DISVIS_PAR="-a ${ANG} -vs ${VS}"
         TYPE="-p ${nc}"
         echo "-------------------------------------"
