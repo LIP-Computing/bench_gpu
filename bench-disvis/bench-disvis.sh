@@ -20,20 +20,45 @@
 # limitations under the License.
 #
 
+# Variables to change by the user, should turn into argument to the script
+#CASE="PRE5-PUP2-complex"
+CASE="RNA-polymerase-II"
+
+# Number of runs of each type for statistical purposes
+NRUNS=4
+
+#############################################################
+# From here on everyhting is fixed
 WDIR=`pwd`
 TIME="/usr/bin/time"
 TIME_STR="time = %e sec\nMem = %M kB"
 
-# Case PRE5-PUP2-complex
 #TYPE is either -g for GPU or -p NN for CPU NN processes
 TAG_TYPE="GPU"
 
-INPUT_DIR=${WDIR}/"PRE5-PUP2-complex"
-PDB1=${INPUT_DIR}/O14250.pdb
-PDB2=${INPUT_DIR}/Q9UT97.pdb
+if [ ${CASE} = "PRE5-PUP2-complex" ]
+then
+  PDBF1=O14250.pdb
+  PDBF2=Q9UT97.pdb
+  CASEDIR=${CASE}
+fi
+
+if [ ${CASE} = "RNA-polymerase-II" ]
+then
+  PDBF1=1wcm_A.pdb
+  PDBF2=1wcm_E.pdb
+  CASEDIR=${CASE}/A-E
+fi
+
+INPUT_DIR=${WDIR}/${CASEDIR}
+PDB1=${INPUT_DIR}/${PDBF1}
+PDB2=${INPUT_DIR}/${PDBF1}
 REST=${INPUT_DIR}/restraints.dat
-mkdir -p ${WDIR}/res
-mkdir -p ${WDIR}/time
+RESOUT=${WDIR}/res-${CASE}
+TIMEOUT=${WDIR}/time-${CASE}
+
+mkdir -p ${RESOUT}
+mkdir -p ${TIMEOUT}
 
 echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
 
@@ -41,11 +66,11 @@ for ANG in "10.0" "5.0"
 do
   for VS in "2" "1"
   do
-    for i in `seq -w 10`
+    for i in `seq -w ${NRUNS}`
     do
       TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-n-${i}"
-      TIME_RES=${WDIR}/time/"tr_${TAG}.txt"
-      OUT_DIR=${WDIR}/res/"res_${TAG}"
+      TIME_RES=${TIMEOUT}/"tr_${TAG}.txt"
+      OUT_DIR=${RESOUT}/"res_${TAG}"
       DISVIS_PAR="-a ${ANG} -vs ${VS}"
       TYPE="-g"
       echo "-------------------------------------"
@@ -73,11 +98,11 @@ do
   do
     for nc in `seq ${NCORES} -2 1` "1"
     do
-      for i in `seq -w 2`
+      for i in `seq -w ${NRUNS}`
       do
         TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-ncores-${nc}-n-${i}"
-        TIME_RES=${WDIR}/time/"tr_${TAG}.txt"
-        OUT_DIR=${WDIR}/res/"res_${TAG}"
+        TIME_RES=${TIMEOUT}/"tr_${TAG}.txt"
+        OUT_DIR=${RESOUT}/"res_${TAG}"
         DISVIS_PAR="-a ${ANG} -vs ${VS}"
         TYPE="-p ${nc}"
         echo "-------------------------------------"
