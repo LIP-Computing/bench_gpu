@@ -5,6 +5,7 @@
 #########################################################################
 
 import os
+import numpy
 
 if __name__ == '__main__':
     # TODO; this is input arg
@@ -22,16 +23,19 @@ if __name__ == '__main__':
         for cs in cases:
             for ang in angles:
                 for vs in voxspac:
+                    jsres = {'machine': mach, 'case': cs, 'angle': ang,
+                             'voxspac': vs, 'rtime': []}
                     for n in lruns:
                         tr_file = root_dir + os.sep + mach + os.sep + \
                             'time-' + cs + os.sep + 'tr_ang-' + ang + \
                             '-vs-' + vs + '-type-GPU' + '-n-' + n + '.txt'
                         try:
                             f = open(tr_file)
-                            print '-> File: %s' % tr_file
+                            #print '-> File: %s' % tr_file
                             s = f.readline()
                             rtime = s.split('=')[1].split()[0]
-                            print rtime
+                            jsres['rtime'].append(rtime)
                         except IOError:
                             print 'Cannot open', tr_file
 
+    print jsres
