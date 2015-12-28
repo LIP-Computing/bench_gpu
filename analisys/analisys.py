@@ -6,7 +6,7 @@
 
 import os
 import pprint
-import numpy
+import numpy as np
 
 if __name__ == '__main__':
     # TODO; this is input arg
@@ -40,7 +40,7 @@ if __name__ == '__main__':
                             f = open(tr_file)
                             #print '-> File: %s' % tr_file
                             s = f.readline()
-                            rtime = s.split('=')[1].split()[0]
+                            rtime = float(s.split('=')[1].split()[0])
                             jsres['rtime'].append(rtime)
                         except IOError:
                             print 'Cannot open', tr_file
@@ -58,12 +58,16 @@ if __name__ == '__main__':
                                 f = open(tr_file)
                                 #print '-> File: %s' % tr_file
                                 s = f.readline()
-                                rtime = s.split('=')[1].split()[0]
+                                rtime = float(s.split('=')[1].split()[0])
                                 jsres['rtime'].append(rtime)
                             except IOError:
                                 print 'Cannot open', tr_file
                             ljsres.append(jsres)
-
         i += 1
 
+    #pprint.pprint(ljsres)
+    for jsres in ljsres:
+        jsres['rtime'] = np.array(jsres['rtime'])
+        jsres['mean'] = np.mean(jsres['rtime'])
     pprint.pprint(ljsres)
+
