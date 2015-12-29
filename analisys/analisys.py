@@ -22,6 +22,7 @@ if __name__ == '__main__':
     lrunsG = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
     lrunsC = ['1', '2']
     ljsres = []
+    laggrRes = []
 
     i = 0 # index of machine type matches the index of total number of cores
     for mach in machines:
@@ -31,6 +32,16 @@ if __name__ == '__main__':
         for cs in cases:
             for ang in angles:
                 for vs in voxspac:
+                    m = np.empty( [tot_cpus[i]/2+1,], dtype=float )
+                    s = np.empty( [tot_cpus[i]/2+1,], dtype=float )
+                    h = np.array([1])
+                    t = np.array(range(2, tot_cpus[i]+1, 2))
+                    n = np.concatenate([h, t])
+                    aggrRes = {'machine': mach, 'case': cs, 'angle': ang,
+                               'voxspac': vs,
+                               'GPU': {'mean': None, 'stdev': None},
+                               'CPU': {'mean': m, 'stdev': s, 'ncores': n}}
+                    laggrRes.append(aggrRes)
                     jsres = {'machine': mach, 'case': cs, 'angle': ang,
                              'voxspac': vs, 'type': 'GPU', 'rtime': []}
                     for n in lrunsG:
@@ -49,6 +60,7 @@ if __name__ == '__main__':
                     for ncores in lncores:
                         jsres = {'machine': mach, 'case': cs, 'angle': ang,
                                  'voxspac': vs, 'type': 'CPU',
+                                 'totCPU': tot_cpus[i],
                                  'ncores': ncores, 'rtime': []}
                         for n in lrunsC:
                             tr_file = root_dir + os.sep + mach + os.sep + \
@@ -66,86 +78,44 @@ if __name__ == '__main__':
                         ljsres.append(jsres)
         i += 1
 
-    #pprint.pprint(ljsres)
     for jsres in ljsres:
         jsres['rtime'] = np.array(jsres['rtime'])
         jsres['mean'] = np.mean(jsres['rtime'])
         jsres['stdev'] = np.std(jsres['rtime'])
         print jsres['case'], jsres['machine'], jsres['angle'], jsres['voxspac'], jsres['type']
-    #pprint.pprint(ljsres)
-    print len(ljsres)
 
+    for j in ljsres:
+        for a in laggrRes:
+            if j['case'] == a['case'] and j['machine'] == a['machine'] and \
+               j['angle'] == a['angle'] and j['voxspac'] == a['voxspac']:
+                if j['type'] == 'GPU':
+                    a['GPU']['mean'] = j['mean']
+                    a['GPU']['stdev'] = j['stdev']
+                if j['type'] == 'CPU':
+                    if j['ncores'] == 1:
+                        a['CPU']['mean'][0] = j['mean']
+                        a['CPU']['stdev'][0] = j['stdev']
+                    else:
+                        a['CPU']['mean'][j['ncores']/2] = j['mean']
+                        a['CPU']['stdev'][j['ncores']/2] = j['stdev']
 
-#    laggRes = []
-#    for jsres in ljsres:
-#        aggRes = {'machine': jsres['machine'], 'case': jsres['case'],
-#                  'angle': jsres['angle'], 'voxspac': jsres['voxspac']}
+    for a in laggrRes:
+        if not np.isnan(a['CPU']['mean'][0]):
+            print a
 
-
-
-
-
-    mPRE_MP01_a5_vs1 = np.empty([14,], dtype=float)
-    print '------ PRE_MP01_a5_vs1'
-    print len(mPRE_MP01_a5_vs1)
-    for jsres in ljsres:
-        if jsres['case'] == 'PRE5-PUP2-complex' and \
-           jsres['machine'] == 'M-Phys-01' and \
-           jsres['angle'] == '5.0' and \
-           jsres['voxspac'] == '1':
-            if jsres['type'] == 'GPU':
-                mPRE_MP01_a5_vs1[13] = jsres['mean']
-            if jsres['type'] == 'CPU':
-                if jsres['ncores'] == 1:
-                    mPRE_MP01_a5_vs1[0] = jsres['mean']
-                else:
-                    mPRE_MP01_a5_vs1[jsres['ncores']/2] = jsres['mean']
-
-    print mPRE_MP01_a5_vs1
-
-    mPRE_MK01_a5_vs1 = np.empty([14,], dtype=float)
-    print '------ PRE_MK01_a5_vs1'
-    print len(mPRE_MK01_a5_vs1)
-    for jsres in ljsres:
-        if jsres['case'] == 'PRE5-PUP2-complex' and \
-           jsres['machine'] == 'M-KVM-01' and \
-           jsres['angle'] == '5.0' and \
-           jsres['voxspac'] == '1':
-            if jsres['type'] == 'GPU':
-                mPRE_MK01_a5_vs1[13] = jsres['mean']
-            if jsres['type'] == 'CPU':
-                if jsres['ncores'] == 1:
-                    mPRE_MK01_a5_vs1[0] = jsres['mean']
-                else:
-                    mPRE_MK01_a5_vs1[jsres['ncores']/2] = jsres['mean']
-
-    print mPRE_MK01_a5_vs1
-
-    mPRE_MP02_a5_vs1 = np.empty([6,], dtype=float)
-    print '------ PRE_MP02_a5_vs1'
-    print len(mPRE_MP02_a5_vs1)
-    for jsres in ljsres:
-        if jsres['case'] == 'PRE5-PUP2-complex' and \
-           jsres['machine'] == 'M-Phys-02' and \
-           jsres['angle'] == '5.0' and \
-           jsres['voxspac'] == '1':
-            if jsres['type'] == 'GPU':
-                mPRE_MP02_a5_vs1[5] = jsres['mean']
-            if jsres['type'] == 'CPU':
-                if jsres['ncores'] == 1:
-                    mPRE_MP02_a5_vs1[0] = jsres['mean']
-                else:
-                    mPRE_MP02_a5_vs1[jsres['ncores']/2] = jsres['mean']
-
-    print mPRE_MP02_a5_vs1
+    print '--------------------------------------'
+    print 'Case\tMachine\tAngle\tVoxSpac\tTimeGPU (sec)\tTimeCPU 1 core\tNCores Mintime\tTimeCPUmin'
+    for a in laggrRes:
+        if not np.isnan(a['CPU']['mean'][0]):
+            #plt.plot(a['CPU']['ncores'], a['CPU']['mean'], 'ro')
+            #plt.show
+            print '%s\t%s\t%s\t%s\t%5.1f\t%5.1f\t%d\t%5.1f' % \
+                (a['case'], a['machine'], a['angle'], a['voxspac'],
+                 a['GPU']['mean'], a['CPU']['mean'][0], a['CPU']['ncores'][np.argmin(a['CPU']['mean'])],
+                 np.min(a['CPU']['mean']))
 
 
 
-
-
-    x1 = np.array ([0, 1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24])
-    x2 = np.array ([0, 1, 2, 4, 6, 8])
-
-    plt.plot(x1, mPRE_MP01_a5_vs1, 'ro')
-    plt.plot(x2, mPRE_MP02_a5_vs1, 'bo')
-    plt.show
+    #plt.plot(x1, mPRE_MP01_a5_vs1, 'ro')
+    #plt.plot(x2, mPRE_MP02_a5_vs1, 'bo')
+    #plt.show
