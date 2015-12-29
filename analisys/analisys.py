@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     # TODO; this is input arg
-    root_dir = "/home/david/Dropbox/AA-work/LIP-tech/bench-results"
+    root_dir = "/home/david/AA-work/bench-results"
 
     machines = ['M-KVM-01', 'M-Phys-01', 'M-Phys-02']
     tot_cpus = [24, 24, 8]
@@ -19,8 +19,8 @@ if __name__ == '__main__':
     angles = ['5.0', '10.0']
     voxspac = ['1', '2']
     types = ['GPU', 'CPU']
-    lrunsG = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
-    lrunsC = ['1', '2']
+    lrunsG = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+    lrunsC = ['1', '2', '3']
     ljsres = []
     laggrRes = []
 

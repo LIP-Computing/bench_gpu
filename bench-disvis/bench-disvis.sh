@@ -62,11 +62,11 @@ mkdir -p ${TIMEOUT}
 
 echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
 
-for ANG in "10.0" "5.0"
+for i in `seq ${NRUNS}`
 do
-  for VS in "2" "1"
+  for ANG in "10.0" "5.0"
   do
-    for i in `seq -w ${NRUNS}`
+    for VS in "2" "1"
     do
       TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-n-${i}"
       TIME_RES=${TIMEOUT}/"tr_${TAG}.txt"
@@ -92,13 +92,13 @@ done
 NCORES=`nproc`
 TAG_TYPE="CPU"
 
-for ANG in "10.0" "5.0"
+for i in `seq ${NRUNS}`
 do
-  for VS in "2" "1"
+  for ANG in "10.0" "5.0"
   do
-    for nc in `seq ${NCORES} -2 1` "1"
+    for VS in "2" "1"
     do
-      for i in `seq -w ${NRUNS}`
+      for nc in `seq ${NCORES} -2 1` "1"
       do
         TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-ncores-${nc}-n-${i}"
         TIME_RES=${TIMEOUT}/"tr_${TAG}.txt"
