@@ -90,8 +90,8 @@ do
       echo
       echo "-> Executing disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
       echo
-      echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} ${DOCK_RUN} \"export LD_LIBRARY_PATH=/usr/local/lib64; disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}\""
-      #${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} "export LD_LIBRARY_PATH=/usr/local/lib64; disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+      #echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} ${DOCK_RUN} \"export LD_LIBRARY_PATH=/usr/local/lib64; disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}\""
+      ${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} "export LD_LIBRARY_PATH=/usr/local/lib64; disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
     done
   done
 done
@@ -123,8 +123,8 @@ do
         echo
         echo "-> Executing disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
         echo
-        echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} ${DOCK_RUN} \"export LD_LIBRARY_PATH=/usr/local/lib64; disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}\""
-        #${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} "export LD_LIBRARY_PATH=/usr/local/lib64; disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+        #echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} ${DOCK_RUN} \"export LD_LIBRARY_PATH=/usr/local/lib64; disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}\""
+        ${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} "export LD_LIBRARY_PATH=/usr/local/lib64; disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
       done
     done
   done
