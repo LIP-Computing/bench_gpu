@@ -60,9 +60,9 @@ INPUT_DIR=${WDIR}/${CASEDIR}
 PDB1=${INPUT_DIR}/${PDBF1}
 PDB2=${INPUT_DIR}/${PDBF2}
 REST=${INPUT_DIR}/restraints.dat
-RESOUT=${WDIR}/res-${CASE}
-LRESOUT=${LWDIR}/res-${CASE}
-TIMEOUT=${WDIR}/time-${CASE}
+RESOUT=${WDIR}/res-docker-${CASE}
+LRESOUT=${LWDIR}/res-docker-${CASE}
+TIMEOUT=${WDIR}/time-docker-${CASE}
 
 mkdir -p ${LRESOUT}
 mkdir -p ${TIMEOUT}
