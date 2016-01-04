@@ -52,7 +52,7 @@ then
 fi
 
 ANG="4.71"
-DISVIS_PAR="-a ${ANG} -l"
+PWRFIT_PAR="-a ${ANG} -l"
 
 INPUT_DIR=${WDIR}/${CASEDIR}
 PDB=${INPUT_DIR}/${PDBF}
@@ -76,10 +76,10 @@ do
   echo "-> TYPE = ${TAG_TYPE}"
   echo "-> Run num: ${i}"
   echo
-  echo "-> Executing powerfit ${PDB} ${MAP} ${RESOL} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+  echo "-> Executing powerfit ${PDB} ${MAP} ${RESOL} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}"
   echo
-  #echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} powerfit ${PDB} ${MAP} ${RESOL} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}}"
-  ${TIME} -f "${TIME_STR}" -o ${TIME_RES} powerfit ${PDB} ${MAP} ${RESOL} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
+  #echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} powerfit ${PDB} ${MAP} ${RESOL} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}}"
+  ${TIME} -f "${TIME_STR}" -o ${TIME_RES} powerfit ${PDB} ${MAP} ${RESOL} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}
 done
 
 
@@ -102,10 +102,10 @@ do
     echo "-> Num cores = ${nc}"
     echo "-> Run num: ${i}"
     echo
-    echo "-> Executing powerfit ${PDB} ${MAP} ${RESOL} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+    echo "-> Executing powerfit ${PDB} ${MAP} ${RESOL} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}"
     echo
-    #echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} powerfit ${PDB} ${MAP} ${RESOL} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}}"
-    ${TIME} -f "${TIME_STR}" -o ${TIME_RES} powerfit ${PDB} ${MAP} ${RESOL} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
+    #echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} powerfit ${PDB} ${MAP} ${RESOL} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}}"
+    ${TIME} -f "${TIME_STR}" -o ${TIME_RES} powerfit ${PDB} ${MAP} ${RESOL} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}
   done
 done
 
