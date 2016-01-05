@@ -13,8 +13,8 @@ if __name__ == '__main__':
     # TODO; this is input arg
     root_dir = "/home/david/AA-work/bench-results"
 
-    machines = ['M-KVM-01', 'M-Phys-01', 'M-Phys-02', 'M-Phys-04']
-    tot_cpus = [24, 24, 8, 24]
+    machines = ['M-KVM-01', 'M-Phys-01', 'M-Phys-02', 'M-Phys-04', 'M-Dock-02']
+    tot_cpus = [24, 24, 8, 24, 8]
     cases = ['RNA-polymerase-II', 'PRE5-PUP2-complex']
     angles = ['5.0', '10.0']
     voxspac = ['1', '2']
@@ -26,6 +26,10 @@ if __name__ == '__main__':
 
     i = 0 # index of machine type matches the index of total number of cores
     for mach in machines:
+        if mach == 'M-Dock-01' or mach == 'M-Dock-02':
+            initName = 'time-docker-'
+        else:
+            initName = 'time-'
         lncores = [x for x in range(tot_cpus[i], 0, -2)]
         lncores.append(1)
         print lncores
@@ -46,7 +50,7 @@ if __name__ == '__main__':
                              'voxspac': vs, 'type': 'GPU', 'rtime': []}
                     for n in lrunsG:
                         tr_file = root_dir + os.sep + mach + os.sep + \
-                            'time-' + cs + os.sep + 'tr_ang-' + ang + \
+                            initName + cs + os.sep + 'tr_ang-' + ang + \
                             '-vs-' + vs + '-type-GPU' + '-n-' + n + '.txt'
                         try:
                             f = open(tr_file)
@@ -64,7 +68,7 @@ if __name__ == '__main__':
                                  'ncores': ncores, 'rtime': []}
                         for n in lrunsC:
                             tr_file = root_dir + os.sep + mach + os.sep + \
-                                'time-' + cs + os.sep + 'tr_ang-' + ang + \
+                                initName + cs + os.sep + 'tr_ang-' + ang + \
                                 '-vs-' + vs + '-type-CPU' + '-ncores-' + \
                                 str(ncores) + '-n-' + n + '.txt'
                             try:
