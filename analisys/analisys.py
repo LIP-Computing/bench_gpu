@@ -13,8 +13,8 @@ if __name__ == '__main__':
     # TODO; this is input arg
     root_dir = "/home/david/AA-work/bench-results"
 
-    machines = ['M-KVM-01', 'M-Phys-01', 'M-Phys-02', 'M-Phys-04', 'M-Dock-02']
-    tot_cpus = [24, 24, 8, 24, 8]
+    machines = ['M-KVM-01', 'M-Phys-01', 'M-Phys-02', 'M-Phys-04', 'M-Dock-01', 'M-Dock-02']
+    tot_cpus = [24, 24, 8, 24, 24, 8]
     cases = ['RNA-polymerase-II', 'PRE5-PUP2-complex']
     angles = ['5.0', '10.0']
     voxspac = ['1', '2']
