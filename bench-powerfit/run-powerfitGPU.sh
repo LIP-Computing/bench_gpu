@@ -17,26 +17,14 @@
 # limitations under the License.
 #
 
-# Variables to change by the user, should turn into argument to the script
-CASE="GroEL-GroES"
-#CASE="RsgA-ribosome"
+### Type is "-g" options to run on the GPU
+TYPE="-g"
 
-WDIR=`pwd`
-CASEDIR=${CASE}
-if [ ${CASE} = "GroEL-GroES" ]
-then
-  PDBF=GroES_1gru.pdb
-  MAPF=1046.map
-  RESOL=23.0
-fi
-
-if [ ${CASE} = "RsgA-ribosome" ]
-then
-  PDBF=4adv_V.pdb
-  MAPF=2017.map
-  RESOL=13.3
-fi
-
+CASEDIR="GroEL-GroES"
+WDIR="/home"
+PDBF="GroES_1gru.pdb"
+MAPF="1046.map"
+RESOL="46.0"
 ANG="4.71"
 PWRFIT_PAR="-a ${ANG} -l"
 INPUT_DIR=${WDIR}/${CASEDIR}
@@ -44,12 +32,8 @@ PDB=${INPUT_DIR}/${PDBF}
 MAP=${INPUT_DIR}/${MAPF}
 OUT_DIR="${WDIR}/result"
 
-### Type is "-g" options to run on the GPU
-TYPE="-g"
-
 mkdir -p ${OUT_DIR}
-echo "-> Input files: ${PDB} ${MAP} Resolution: ${RESOL}"
 echo "-------------------------------------"
 echo "-> Executing powerfit ${PDB} ${MAP} ${RESOL} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}"
 echo
-powerfit ${PDB} ${MAP} ${RESOL} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}
+powerfit ${MAP} ${RESOL} ${PDB} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}
