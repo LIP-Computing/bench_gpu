@@ -15,15 +15,16 @@ RUN mkdir -p /tmp/setup && \
     apt-get install -y --no-install-recommends \
         build-essential \
         cmake \
-        cython \
         git \
         libffi-dev \
         libfftw3-dev \
         libfftw3-double3 \
         libfftw3-long3 \
         libfftw3-single3 \
+        module-init-tools \
         python-dev \
         python-pip \
+        python-setuptools \
         software-properties-common \
         tar \
         wget
@@ -39,6 +40,7 @@ RUN cd /tmp/setup && \
     wget http://www.lip.pt/~david/cl_include.tgz && \
     tar zxvf cl_include.tgz && \
     pip install --upgrade pip && \
+    pip install Cython && \
     pip install mako && \
     pip install numpy && \
     pip install	pyfftw && \
