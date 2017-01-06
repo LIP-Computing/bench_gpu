@@ -20,6 +20,9 @@
 # limitations under the License.
 #
 
+# Docker container name
+DOCK_NAME=disvis-ubuntu16.04-build1
+
 # Variables to change by the user, should turn into argument to the script
 CASE="PRE5-PUP2-complex"
 #CASE="RNA-polymerase-II"
@@ -70,7 +73,7 @@ mkdir -p ${TIMEOUT}
 echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
 
 ### Run on the GPUs
-DOCK_RUN="docker run ${DOCK_OPT} opencl_disvis /bin/sh -c"
+DOCK_RUN="docker run ${DOCK_OPT} ${DOCK_NAME} /bin/sh -c"
 
 for i in `seq ${NRUNS}`
 do
