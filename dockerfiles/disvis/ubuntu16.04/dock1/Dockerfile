@@ -9,6 +9,10 @@ MAINTAINER Mario David <mariojmdavid@gmail.com>
 ENV NVIDIA_VER 367.48
 ENV NVIDIA_DRV NVIDIA-Linux-x86_64-$NVIDIA_VER.run
 
+# Disvis or Powerfit, uncomment which one you want
+ENV HADD disvis
+# ENV HADD powerfit
+
 RUN mkdir -p /tmp/setup && \
     locale-gen en_US.UTF-8 && \
     apt-get update && \
@@ -35,26 +39,34 @@ RUN mkdir -p /tmp/setup && \
 COPY $NVIDIA_DRV /tmp/setup/$NVIDIA_DRV
 
 RUN cd /tmp/setup && \
-    ./$NVIDIA_DRV -s --no-kernel-module && \
-    cd /usr/include && \
+    ./$NVIDIA_DRV -s --no-kernel-module
+
+RUN cd /usr/include && \
     wget http://www.lip.pt/~david/cl_include.tgz && \
-    tar zxvf cl_include.tgz && \
-    pip install --upgrade pip && \
+    tar zxvf cl_include.tgz
+
+RUN pip install --upgrade pip && \
     pip install Cython && \
-    pip install mako && \
-    pip install numpy && \
-    pip install	pyfftw && \
-    pip install	pyopencl && \
-    cd /tmp/setup && \
+    pip install mako
+
+RUN pip install numpy
+RUN pip install scipy
+RUN pip install pyfftw
+RUN pip install pyopencl
+
+RUN cd /tmp/setup && \
     git clone https://github.com/clMathLibraries/clFFT.git && \
     git clone https://github.com/geggo/gpyfft.git && \
-    git clone https://github.com/haddocking/disvis.git && \
-    cd /tmp/setup/clFFT/src && \
+    git clone https://github.com/haddocking/${HADD}.git
+
+RUN cd /tmp/setup/clFFT/src && \
     cmake CMakeLists.txt && \
-    make install && \
-    cd /tmp/setup/gpyfft && \
-    python setup.py install && \
-    cd /tmp/setup/disvis && \
+    make install
+
+RUN cd /tmp/setup/gpyfft && \
+    python setup.py install
+
+RUN cd /tmp/setup/${HADD} && \
     python setup.py install && \
     rm -f /usr/include/cl_include.tgz && \
     rm -rf /tmp/setup
