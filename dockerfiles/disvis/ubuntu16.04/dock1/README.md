@@ -1,5 +1,5 @@
-# docker-opencl
-Dockerfile: Ubuntu 14.04 (LTS) NVIDIA driver v361.42 + (py)opencl
+# Docker disvis ubuntu16.04
+Dockerfile: Ubuntu 16.04 (LTS) NVIDIA driver v367.48 + disvis
 
 ## Pre-conditions
 
@@ -8,7 +8,7 @@ installed in the docker image, check here:
 
 * http://www.nvidia.com/Download/index.aspx?lang=en-us
 
-The Dockerfile sets the NVIDIA driver version to: 361.42, if you have a different
+The Dockerfile sets the NVIDIA driver version to: 367.48, if you have a different
 version on the host machine adjust the ENV NVIDIA_VER accordingly.
 
 In case the NVIDIA driver is not online or you have it locally uncomment
@@ -19,7 +19,7 @@ the following line:
 
 ## Install
 
-* docker build -t pyopencl .
+* docker build -t disvis-ubuntu16.04-build1 .
 
 ## Run
 
@@ -31,7 +31,7 @@ docker run \
     --device=/dev/nvidia0:/dev/nvidia0 \
     --device=/dev/nvidiactl:/dev/nvidiactl \
     --device=/dev/nvidia-uvm:/dev/nvidia-uvm \
-    pyopencl
+    disvis-ubuntu16.04-build1
 ```
 
 
