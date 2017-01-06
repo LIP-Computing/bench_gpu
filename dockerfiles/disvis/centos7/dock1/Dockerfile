@@ -1,4 +1,4 @@
-# docker build -t disvis-ubuntu16.04-build1 .
+# docker build -t disvis-centos7-build1 .
 
 FROM centos:7
 
@@ -20,6 +20,8 @@ RUN yum -y update
 RUN yum -y install \
         atlas-devel \
         blas-devel \
+        boost-devel.x86_64 \
+        boost-static.x86_64 \
         cmake.x86_64 \
         fftw.x86_64 \
         fftw-devel.x86_64 \
@@ -34,6 +36,7 @@ RUN yum -y install \
         kernel-devel \
         lapack-devel \
         libffi-devel.x86_64 \
+        make \
         openssl-devel \
         perl \
         python-devel \
