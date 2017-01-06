@@ -20,6 +20,7 @@ RUN mkdir -p /tmp/setup && \
         build-essential \
         cmake \
         git \
+        libboost-all-dev \
         libffi-dev \
         libfftw3-dev \
         libfftw3-double3 \
@@ -44,17 +45,6 @@ RUN cd /tmp/setup && \
 RUN cd /usr/include && \
     wget http://www.lip.pt/~david/cl_include.tgz && \
     tar zxvf cl_include.tgz
-
-#RUN cd /tmp/setup && \
-#    wget http://sourceforge.net/projects/boost/files/boost/1.55.0/boost_1_55_0.tar.gz && \
-#    tar zxvf boost_1_55_0.tar.gz && \
-#    cd boost_1_55_0 && \
-#    ./bootstrap.sh --prefix=/usr/local/boost_1_55_0 && \
-#    ./b2 --prefix=/usr/local/boost_1_55_0 link=shared threading=multi runtime-link=shared install && \
-#    ln -s /usr/local/boost_1_55_0 /usr/local/boost && \
-#    cp -rpv /usr/local/boost/include/boost /usr/include/ && \
-#    echo "/usr/local/boost/lib" > /etc/ld.so.conf.d/boost.conf && \
-#    ldconfig && \
 
 RUN pip install --upgrade pip && \
     pip install Cython && \
