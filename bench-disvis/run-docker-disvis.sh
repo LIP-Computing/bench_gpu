@@ -73,7 +73,7 @@ mkdir -p ${TIMEOUT}
 echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
 
 ### Run on the GPUs
-DOCK_RUN="docker run ${DOCK_OPT} ${DOCK_NAME} /bin/sh -c"
+DOCK_RUN="docker run ${DOCK_OPT} ${DOCK_NAME}"
 
 for i in `seq -w ${NRUNS}`
 do
