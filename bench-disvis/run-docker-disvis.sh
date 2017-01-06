@@ -75,7 +75,7 @@ echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
 ### Run on the GPUs
 DOCK_RUN="docker run ${DOCK_OPT} ${DOCK_NAME} /bin/sh -c"
 
-for i in `seq ${NRUNS}`
+for i in `seq -w ${NRUNS}`
 do
   for ANG in "10.0"
   do

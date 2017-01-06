@@ -20,6 +20,9 @@
 # limitations under the License.
 #
 
+# This is for physical machines or VMs
+MACH=Phys-Mach
+
 # Variables to change by the user, should turn into argument to the script
 #CASE="PRE5-PUP2-complex"
 CASE="RNA-polymerase-II"
@@ -31,7 +34,7 @@ NRUNS=3
 # From here on everyhting is fixed
 WDIR=`pwd`
 TIME="/usr/bin/time"
-TIME_STR="time = %e sec\nMem = %M kB"
+TIME_STR="%e\ntime = %e sec\nMem = %M kB"
 
 #TYPE is either -g for GPU or -p NN for CPU NN processes
 TAG_TYPE="GPU"
@@ -54,15 +57,15 @@ INPUT_DIR=${WDIR}/${CASEDIR}
 PDB1=${INPUT_DIR}/${PDBF1}
 PDB2=${INPUT_DIR}/${PDBF2}
 REST=${INPUT_DIR}/restraints.dat
-RESOUT=${WDIR}/res-${CASE}
-TIMEOUT=${WDIR}/time-${CASE}
+RESOUT=${WDIR}/${MACH}/res-${CASE}
+TIMEOUT=${WDIR}/${MACH}/time-${CASE}
 
 mkdir -p ${RESOUT}
 mkdir -p ${TIMEOUT}
 
 echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
 
-for i in `seq ${NRUNS}`
+for i in `seq -w ${NRUNS}`
 do
   for ANG in "10.0" "5.0"
   do
@@ -78,9 +81,9 @@ do
       echo "-> TYPE = ${TAG_TYPE}"
       echo "-> Run num: ${i}"
       echo
-      echo "-> Executing disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+      echo "-> Executing:"
+      echo     "${TIME} -f ${TIME_STR} -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
       echo
-      #echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
       ${TIME} -f "${TIME_STR}" -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
     done
   done

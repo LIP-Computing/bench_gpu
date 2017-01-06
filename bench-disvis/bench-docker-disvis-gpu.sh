@@ -35,7 +35,7 @@ NRUNS=3
 LWDIR=`pwd`   # Local/physical directory
 WDIR='/home'  # Working dir inside the docker
 TIME="/usr/bin/time"
-TIME_STR="time = %e sec\nMem = %M kB"
+TIME_STR="%e\ntime = %e sec\nMem = %M kB"
 DOCK_NVD="--device=/dev/nvidia0:/dev/nvidia0 \
           --device=/dev/nvidiactl:/dev/nvidiactl \
           --device=/dev/nvidia-uvm:/dev/nvidia-uvm"
@@ -63,9 +63,9 @@ INPUT_DIR=${WDIR}/${CASEDIR}
 PDB1=${INPUT_DIR}/${PDBF1}
 PDB2=${INPUT_DIR}/${PDBF2}
 REST=${INPUT_DIR}/restraints.dat
-RESOUT=${WDIR}/res-docker-${CASE}
-LRESOUT=${LWDIR}/res-docker-${CASE}
-TIMEOUT=${LWDIR}/time-docker-${CASE}
+RESOUT=${WDIR}/${DOCK_NAME}/res-docker-${CASE}
+LRESOUT=${LWDIR}/${DOCK_NAME}/res-docker-${CASE}
+TIMEOUT=${LWDIR}/${DOCK_NAME}/time-docker-${CASE}
 
 mkdir -p ${LRESOUT}
 mkdir -p ${TIMEOUT}
@@ -73,9 +73,9 @@ mkdir -p ${TIMEOUT}
 echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
 
 ### Run on the GPUs
-DOCK_RUN="docker run ${DOCK_OPT} ${DOCK_NAME} /bin/sh -c"
+DOCK_RUN="docker run ${DOCK_OPT} ${DOCK_NAME}"
 
-for i in `seq ${NRUNS}`
+for i in `seq -w ${NRUNS}`
 do
   for ANG in "10.0" "5.0"
   do
@@ -91,10 +91,10 @@ do
       echo "-> TYPE = ${TAG_TYPE}"
       echo "-> Run num: ${i}"
       echo
-      echo "-> Executing disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+      echo "-> Executing:"
+      echo     "${TIME} -f ${TIME_STR} -o ${TIME_RES} ${DOCK_RUN} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
       echo
-      #echo "${TIME} -f ${TIME_STR} -o ${TIME_RES} ${DOCK_RUN} \"export LD_LIBRARY_PATH=/usr/local/lib64; disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}\""
-      ${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} "export LD_LIBRARY_PATH=/usr/local/lib64; disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+      ${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
     done
   done
 done
