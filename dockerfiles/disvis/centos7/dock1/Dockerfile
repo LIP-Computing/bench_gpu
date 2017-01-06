@@ -8,12 +8,14 @@ MAINTAINER Mario David <mariojmdavid@gmail.com>
 # the physical node
 ENV NVIDIA_VER 367.48
 ENV NVIDIA_DRV NVIDIA-Linux-x86_64-$NVIDIA_VER.run
+ENV LD_LIBRARY_PATH /usr/local/lib64
 
 # Disvis or Powerfit, uncomment which one you want
 ENV HADD disvis
 # ENV HADD powerfit
 
 RUN mkdir -p /tmp/setup
+RUN yum -y install epel-release
 RUN yum -y update
 RUN yum -y install \
         atlas-devel \
