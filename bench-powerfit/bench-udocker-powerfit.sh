@@ -65,9 +65,9 @@ PWRFIT_PAR="-a ${ANG} -l"
 INPUT_DIR=${WDIR}/${CASEDIR}
 PDB=${INPUT_DIR}/${PDBF}
 MAP=${INPUT_DIR}/${MAPF}
-RESOUT=${WDIR}/${DOCK_NAME}/res-docker-${CASE}
-LRESOUT=${LWDIR}/${DOCK_NAME}/res-docker-${CASE}
-TIMEOUT=${LWDIR}/${DOCK_NAME}/time-docker-${CASE}
+RESOUT=${WDIR}/${DOCK_NAME}/res-udocker-${CASE}
+LRESOUT=${LWDIR}/${DOCK_NAME}/res-udocker-${CASE}
+TIMEOUT=${LWDIR}/${DOCK_NAME}/time-udocker-${CASE}
 
 mkdir -p ${LRESOUT}
 mkdir -p ${TIMEOUT}
