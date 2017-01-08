@@ -7,15 +7,16 @@
 import os
 import pprint
 import numpy as np
-import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     # TODO; this is input arg
     root_dir = "/home/david/Dropbox/AA-work/bench-gpu-results"
 
-    machines = ['docker-disvis-centos7-build1',
+    machines = ['Phys-C7-QK2200',
+                'Phys-C7-QK5200',
+                'VM-U16-TK40',
+                'docker-disvis-centos7-build1',
                 'docker-disvis-ubuntu16.04-build1',
-                'Phys-Mach',
                 'udocker-disvis-ubuntu16.04-build1']
     cases = ['RNA-polymerase-II', 'PRE5-PUP2-complex']
     angles = ['5.0', '10.0']
@@ -27,7 +28,7 @@ if __name__ == '__main__':
 
     i = 0 # index of machine type matches the index of total number of cores
     for mach in machines:
-        if mach != 'Phys-Mach':
+        if mach == 'docker-disvis-centos7-build1' or mach == 'docker-disvis-ubuntu16.04-build1' or mach == 'udocker-disvis-ubuntu16.04-build1':
             initName = 'time-docker-'
         else:
             initName = 'time-'
@@ -46,7 +47,7 @@ if __name__ == '__main__':
                             '-vs-' + vs + '-type-GPU' + '-n-' + n + '.txt'
                         try:
                             f = open(tr_file)
-                            #print '-> File: %s' % tr_file
+                            print '-> File: %s' % tr_file
                             s = f.readline()
                             rtime = float(s)
                             jsres['rtime'].append(rtime)
