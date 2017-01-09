@@ -1,5 +1,5 @@
 # Docker disvis ubuntu16.04
-Dockerfile: Ubuntu 16.04 (LTS) NVIDIA driver v367.48 + disvis
+Dockerfile: Ubuntu 16.04 (LTS) NVIDIA driver v367.48 + disvis + powerfit
 
 ## Pre-conditions
 
@@ -19,7 +19,7 @@ the following line:
 
 ## Install
 
-* docker build -t disvis-ubuntu16.04-build1 .
+* docker build -t haddock-ubuntu16.04-build1 .
 
 ## Run
 
@@ -31,7 +31,7 @@ docker run \
     --device=/dev/nvidia0:/dev/nvidia0 \
     --device=/dev/nvidiactl:/dev/nvidiactl \
     --device=/dev/nvidia-uvm:/dev/nvidia-uvm \
-    disvis-ubuntu16.04-build1
+    haddock-ubuntu16.04-build1
 ```
 
 
