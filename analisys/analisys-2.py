@@ -14,10 +14,7 @@ if __name__ == '__main__':
 
     machines = ['Phys-C7-QK2200',
                 'Phys-C7-QK5200',
-                'VM-U16-TK40',
-                'docker-disvis-centos7-build1',
-                'docker-disvis-ubuntu16.04-build1',
-                'udocker-disvis-ubuntu16.04-build1']
+                'VM-U16-TK40']
     cases = ['RNA-polymerase-II', 'PRE5-PUP2-complex']
     angles = ['5.0', '10.0']
     voxspac = ['1', '2']
@@ -28,10 +25,7 @@ if __name__ == '__main__':
 
     i = 0 # index of machine type matches the index of total number of cores
     for mach in machines:
-        if mach == 'docker-disvis-centos7-build1' or mach == 'docker-disvis-ubuntu16.04-build1' or mach == 'udocker-disvis-ubuntu16.04-build1':
-            initName = 'time-docker-'
-        else:
-            initName = 'time-'
+        initName = 'time-'
         for cs in cases:
             for ang in angles:
                 for vs in voxspac:

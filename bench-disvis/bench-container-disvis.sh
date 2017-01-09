@@ -55,7 +55,7 @@ CASE="PRE5-PUP2-complex"
 #CASE="RNA-polymerase-II"
 
 # Number of runs of each type for statistical purposes
-NRUNS=1
+NRUNS=5
 
 #############################################################
 # From here on everyhting is fixed
@@ -110,9 +110,9 @@ DOCK_RUN="${EXEC} run ${DOCK_OPT} ${DOCK_NAME}"
 
 for i in `seq -w ${NRUNS}`
 do
-  for ANG in "10.0"
+  for ANG in "10.0" "5.0"
   do
-    for VS in "2"
+    for VS in "2" "1"
     do
       TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-n-${i}"
       TIME_RES=${TIMEOUT}/"tr_${TAG}.txt"

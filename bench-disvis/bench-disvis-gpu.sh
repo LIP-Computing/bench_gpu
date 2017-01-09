@@ -21,14 +21,16 @@
 #
 
 # This is for physical machines or VMs
-MACH=Phys-Mach
+MACH=Phys-C7-QK2200
+#MACH=Phys-C7-QK5200
+#MACH=VM-U16-TK40
 
 # Variables to change by the user, should turn into argument to the script
-#CASE="PRE5-PUP2-complex"
-CASE="RNA-polymerase-II"
+CASE="PRE5-PUP2-complex"
+#CASE="RNA-polymerase-II"
 
 # Number of runs of each type for statistical purposes
-NRUNS=3
+NRUNS=5
 
 #############################################################
 # From here on everyhting is fixed
