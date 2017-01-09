@@ -23,6 +23,10 @@
 # Docker container name
 DOCK_NAME=disvis-ubuntu16.04-build1
 
+# Run docker or udocker
+#EXEC=docker
+EXEC=udocker.py
+
 # Variables to change by the user, should turn into argument to the script
 CASE="PRE5-PUP2-complex"
 #CASE="RNA-polymerase-II"
@@ -40,7 +44,13 @@ DOCK_NVD="--device=/dev/nvidia0:/dev/nvidia0 \
           --device=/dev/nvidiactl:/dev/nvidiactl \
           --device=/dev/nvidia-uvm:/dev/nvidia-uvm"
 VDIR="-v ${LWDIR}:${WDIR}"
-DOCK_OPT="${DOCK_NVD} ${VDIR}"
+
+DOCK_OPT="${VDIR}"
+
+if [ ${EXEC} = "docker" ]
+then
+  DOCK_OPT="${DOCK_NVD} ${VDIR}"
+fi
 
 #TYPE is either -g for GPU or -p NN for CPU NN processes
 TAG_TYPE="GPU"
@@ -73,7 +83,7 @@ mkdir -p ${TIMEOUT}
 echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
 
 ### Run on the GPUs
-DOCK_RUN="docker run ${DOCK_OPT} ${DOCK_NAME}"
+DOCK_RUN="${EXEC} run ${DOCK_OPT} ${DOCK_NAME}"
 
 for i in `seq -w ${NRUNS}`
 do

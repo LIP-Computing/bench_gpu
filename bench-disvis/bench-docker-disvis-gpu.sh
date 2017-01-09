@@ -20,6 +20,10 @@
 # limitations under the License.
 #
 
+# This sets the type of machine: Phys, VM, Docker, or uDocker
+MACH=Dock
+#MACH=UDock
+
 # Docker container name
 DOCK_NAME=disvis-ubuntu16.04-build1
 
@@ -42,7 +46,7 @@ DOCK_NVD="--device=/dev/nvidia0:/dev/nvidia0 \
 VDIR="-v ${LWDIR}:${WDIR}"
 DOCK_OPT="${DOCK_NVD} ${VDIR}"
 
-#TYPE is either -g for GPU or -p NN for CPU NN processes
+#TYPE is -g for GPU
 TAG_TYPE="GPU"
 
 if [ ${CASE} = "PRE5-PUP2-complex" ]
