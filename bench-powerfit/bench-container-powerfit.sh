@@ -60,7 +60,7 @@ NRUNS=5
 LWDIR=`pwd`   # Local/physical directory
 WDIR='/home'  # Working dir inside the docker
 TIME="/usr/bin/time"
-TIME_STR="time = %e sec\nMem = %M kB"
+TIME_STR="%e\ntime = %e sec\nMem = %M kB"
 DOCK_NVD="--device=/dev/nvidia0:/dev/nvidia0 \
           --device=/dev/nvidiactl:/dev/nvidiactl \
           --device=/dev/nvidia-uvm:/dev/nvidia-uvm"
