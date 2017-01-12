@@ -131,3 +131,5 @@ do
     done
   done
 done
+
+# udocker.py rm `udocker.py ps|cut -d" " -f 1|grep -v CONTAINER`

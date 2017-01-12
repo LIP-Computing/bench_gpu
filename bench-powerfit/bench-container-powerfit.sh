@@ -125,3 +125,5 @@ do
   echo
   ${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} powerfit ${MAP} ${RESOL} ${PDB} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}
 done
+
+#udocker.py rm `udocker.py ps|cut -d" " -f 1|grep -v CONTAINER`
