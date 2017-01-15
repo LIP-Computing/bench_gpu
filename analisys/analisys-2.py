@@ -12,8 +12,7 @@ if __name__ == '__main__':
     # TODO; this is input arg
     root_dir = "/home/david/Dropbox/AA-work/bench-gpu-results"
 
-    machines = ['Phys-C7-QK2200',
-                'Phys-C7-QK5200',
+    machines = ['Phys-C7-QK5200',
                 'VM-U16-TK40',
                 'Dock-C7-QK5200',
                 'Dock-C7-TK40',
