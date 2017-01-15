@@ -18,7 +18,10 @@ if __name__ == '__main__':
                 'Dock-C7-QK5200',
                 'Dock-C7-TK40',
                 'Dock-U16-QK5200',
-                'Dock-U16-TK40']
+                'Dock-U16-TK40',
+                'UDock-C7-QK5200',
+                'UDock-U16-QK5200'
+                ]
     cases = ['RNA-polymerase-II', 'PRE5-PUP2-complex']
     angles = ['5.0', '10.0']
     voxspac = ['1', '2']
