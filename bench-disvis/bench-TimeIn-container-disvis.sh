@@ -130,7 +130,7 @@ do
       echo     "${DOCK_RUN} ${TIME} -f "${TIME_STR}" -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
       echo
       ${DOCK_RUN} ${TIME} -f "${TIME_STR}" -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
-      rm -rf ${LRESOUT}
+      rm -rf ${LRESOUT}/"res_${TAG}"
     done
   done
 done

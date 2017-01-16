@@ -125,7 +125,7 @@ do
   echo     "${DOCK_RUN} ${TIME} -f "${TIME_STR}" -o ${TIME_RES} powerfit ${MAP} ${RESOL} ${PDB} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}"
   echo
   ${DOCK_RUN} ${TIME} -f "${TIME_STR}" -o ${TIME_RES} powerfit ${MAP} ${RESOL} ${PDB} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}
-  rm -rf ${LRESOUT}
+  rm -rf ${LRESOUT}/"res_${TAG}"
 done
 
 # udocker.py rm `udocker.py ps|cut -d" " -f 1|grep -v CONTAINER`

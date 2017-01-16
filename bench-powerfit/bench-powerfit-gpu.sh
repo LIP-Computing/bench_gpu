@@ -21,16 +21,16 @@
 #
 
 # This is for physical machines or VMs
-MACH=Phys-C7-QK2200
+#MACH=Phys-C7-QK2200
 #MACH=Phys-C7-QK5200
-#MACH=VM-U16-TK40
+MACH=VM-U16-TK40
 
 # Variables to change by the user, should turn into argument to the script
 CASE="GroEL-GroES"
 #CASE="RsgA-ribosome"
 
 # Number of runs of each type for statistical purposes
-NRUNS=5
+NRUNS=10
 
 #############################################################
 # From here on everyhting is fixed
@@ -62,7 +62,7 @@ PWRFIT_PAR="-a ${ANG} -l"
 INPUT_DIR=${WDIR}/${CASEDIR}
 PDB=${INPUT_DIR}/${PDBF}
 MAP=${INPUT_DIR}/${MAPF}
-RESOUT=${WDIR}/${MACH}/res-${CASE}
+RESOUT=${WDIR}/res-${CASE}
 TIMEOUT=${WDIR}/${MACH}/time-${CASE}
 
 mkdir -p ${RESOUT}
@@ -85,5 +85,6 @@ do
   echo     "${TIME} -f ${TIME_STR} -o ${TIME_RES} powerfit ${MAP} ${RESOL} ${PDB} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}"
   echo
   ${TIME} -f "${TIME_STR}" -o ${TIME_RES} powerfit ${MAP} ${RESOL} ${PDB} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}
+  rm -rf ${OUT_DIR}
 done
 

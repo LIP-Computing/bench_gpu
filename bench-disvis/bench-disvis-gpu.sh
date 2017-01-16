@@ -21,16 +21,16 @@
 #
 
 # This is for physical machines or VMs
-MACH=Phys-C7-QK2200
+#MACH=Phys-C7-QK2200
 #MACH=Phys-C7-QK5200
-#MACH=VM-U16-TK40
+MACH=VM-U16-TK40
 
 # Variables to change by the user, should turn into argument to the script
 CASE="PRE5-PUP2-complex"
 #CASE="RNA-polymerase-II"
 
 # Number of runs of each type for statistical purposes
-NRUNS=5
+NRUNS=10
 
 #############################################################
 # From here on everyhting is fixed
@@ -59,7 +59,7 @@ INPUT_DIR=${WDIR}/${CASEDIR}
 PDB1=${INPUT_DIR}/${PDBF1}
 PDB2=${INPUT_DIR}/${PDBF2}
 REST=${INPUT_DIR}/restraints.dat
-RESOUT=${WDIR}/${MACH}/res-${CASE}
+RESOUT=${WDIR}/res-${CASE}
 TIMEOUT=${WDIR}/${MACH}/time-${CASE}
 
 mkdir -p ${RESOUT}
@@ -87,6 +87,7 @@ do
       echo     "${TIME} -f ${TIME_STR} -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
       echo
       ${TIME} -f "${TIME_STR}" -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
+      rm -rf ${OUT_DIR}
     done
   done
 done
