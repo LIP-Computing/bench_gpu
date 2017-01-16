@@ -1,4 +1,4 @@
-# docker build -t haddock-centos7-build1 .
+# docker build -t haddock-centos7-build2 .
 
 FROM centos:7
 
@@ -39,6 +39,7 @@ RUN yum -y install \
         python-pip \
         python-setuptools \
         tar \
+        time \
         wget
 
 # In case the NVIDIA driver is not online or you have it

@@ -1,4 +1,4 @@
-# docker build -t haddock-ubuntu16.04-build1 .
+# docker build -t haddock-ubuntu16.04-build2 .
 
 FROM ubuntu:16.04
 
@@ -29,6 +29,7 @@ RUN mkdir -p /tmp/setup && \
         python-setuptools \
         software-properties-common \
         tar \
+        time \
         wget
 
 # In case the NVIDIA driver is not online or you have it
