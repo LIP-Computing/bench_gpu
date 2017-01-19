@@ -10,7 +10,7 @@ import numpy as np
 
 if __name__ == '__main__':
     # TODO; this is input arg
-    root_dir = "/home/david/Dropbox/AA-work/bench-gpu-results"
+    root_dir = "/home/david/Dropbox/AA-work/bench-gpu-3"
 
     machines = ['Phys-C7-QK5200',
                 'VM-U16-TK40',
@@ -23,11 +23,15 @@ if __name__ == '__main__':
                 'UDock-C7-TK40',
                 'UDock-U16-TK40'
                 ]
-    cases = ['RNA-polymerase-II', 'PRE5-PUP2-complex']
-    angles = ['5.0', '10.0']
-    voxspac = ['1', '2']
+    # cases = ['RNA-polymerase-II', 'PRE5-PUP2-complex']
+    # angles = ['5.0', '10.0']
+    # voxspac = ['1', '2']
+
+    cases = ['PRE5-PUP2-complex']
+    angles = ['5.0']
+    voxspac = ['1']
     types = ['GPU']
-    lrunsG = ['1', '2', '3', '4', '5']
+    lrunsG = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
     ljsres = []
     laggrRes = []
 
@@ -81,7 +85,6 @@ if __name__ == '__main__':
     print '--------------------------------------'
     print '--------------------------------------'
     cases = ['GroEL-GroES', 'RsgA-ribosome']
-    lrunsG = ['1', '2', '3', '4', '5']
     ljsres = []
     laggrRes = []
     i = 0  # index of machine type matches the index of total number of cores
