@@ -25,11 +25,9 @@ EXEC="docker"
 #EXEC="udocker.py"
 
 ####### This is for containers Centos7
-MACH=Dock-C7-QK2200
-#MACH=Dock-C7-QK5200
+MACH=Dock-C7-QK5200
 #MACH=Dock-C7-TK40
 
-#MACH=UDock-C7-QK2200
 #MACH=UDock-C7-QK5200
 #MACH=UDock-C7-TK40
 
@@ -38,11 +36,9 @@ DOCK_NAME=haddock-centos7-build1
 
 ###############################
 ####### This is for containers Ubuntu16.04
-#MACH=Dock-U16-QK2200
 #MACH=Dock-U16-QK5200
 #MACH=Dock-U16-TK40
 
-#MACH=UDock-U16-QK2200
 #MACH=UDock-U16-QK5200
 #MACH=UDock-U16-TK40
 
