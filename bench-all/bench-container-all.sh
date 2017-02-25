@@ -20,6 +20,10 @@
 # limitations under the License.
 #
 
+# Number of runs of each type for statistical purposes
+NRUNS=10
+LWDIR="/cloud/root/bench-run4"
+
 # Run docker or udocker
 EXEC="docker"
 #EXEC="udocker.py"
@@ -45,20 +49,11 @@ DOCK_NAME=haddock-centos7-build2
 # Docker container name
 #DOCK_NAME=haddock-ubuntu16.04-build2
 
-
-# Variables to change by the user, should turn into argument to the script
-CASE="PRE5-PUP2-complex"
-#CASE="RNA-polymerase-II"
-
-# Number of runs of each type for statistical purposes
-NRUNS=10
-
 #############################################################
 # From here on everyhting is fixed
-LWDIR=`pwd`   # Local/physical directory
 WDIR='/home'  # Working dir inside the docker
 TIME="/usr/bin/time"
-TIME_STR="%e\ntime = %e sec\nMem = %M kB"
+TIME_STR="%e\ntime = %e sec"
 DOCK_NVD="--device=/dev/nvidia0:/dev/nvidia0 \
           --device=/dev/nvidiactl:/dev/nvidiactl \
           --device=/dev/nvidia-uvm:/dev/nvidia-uvm"
@@ -74,67 +69,123 @@ fi
 #TYPE is either -g for GPU or -p NN for CPU NN processes
 TAG_TYPE="GPU"
 
-if [ ${CASE} = "PRE5-PUP2-complex" ]
-then
-  PDBF1=O14250.pdb
-  PDBF2=Q9UT97.pdb
-  CASEDIR=${CASE}
-fi
-
-if [ ${CASE} = "RNA-polymerase-II" ]
-then
-  PDBF1=1wcm_A.pdb
-  PDBF2=1wcm_E.pdb
-  CASEDIR=${CASE}/A-E
-fi
-
-INPUT_DIR=${WDIR}/${CASEDIR}
-PDB1=${INPUT_DIR}/${PDBF1}
-PDB2=${INPUT_DIR}/${PDBF2}
-REST=${INPUT_DIR}/restraints.dat
-RESOUT=${WDIR}/${MACH}/res-${CASE}
-LRESOUT=${LWDIR}/${MACH}/res-${CASE}
-TIMEOUT=${LWDIR}/${MACH}/time-${CASE}
-
-mkdir -p ${LRESOUT}
-mkdir -p ${TIMEOUT}
-
-echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
-
-### Run on the GPUs
-DOCK_RUN="${EXEC} run ${DOCK_OPT} ${DOCK_NAME}"
-
-for i in `seq -w ${NRUNS}`
+for CASE in "PRE5-PUP2-complex" "RNA-polymerase-II"
 do
-  for ANG in "10.0" "5.0"
-  do
-    for VS in "2" "1"
+    if [ ${CASE} = "PRE5-PUP2-complex" ]
+    then
+      PDBF1=O14250.pdb
+      PDBF2=Q9UT97.pdb
+      CASEDIR=${CASE}
+    fi
+
+    if [ ${CASE} = "RNA-polymerase-II" ]
+    then
+      PDBF1=1wcm_A.pdb
+      PDBF2=1wcm_E.pdb
+      CASEDIR=${CASE}/A-E
+    fi
+
+    INPUT_DIR=${WDIR}/${CASEDIR}
+    PDB1=${INPUT_DIR}/${PDBF1}
+    PDB2=${INPUT_DIR}/${PDBF2}
+    REST=${INPUT_DIR}/restraints.dat
+    RESOUT=${WDIR}/${MACH}/res-${CASE}
+    LRESOUT=${LWDIR}/${MACH}/res-${CASE}
+    TIMEOUT=${LWDIR}/${MACH}/time-${CASE}
+    mkdir -p ${LRESOUT}
+    mkdir -p ${TIMEOUT}
+    echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
+    DOCK_RUN="${EXEC} run ${DOCK_OPT} ${DOCK_NAME}"
+
+    for i in `seq -w ${NRUNS}`
     do
-      TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-n-${i}"
+      for ANG in "10.0" "5.0"
+      do
+        for VS in "2" "1"
+        do
+          TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-n-${i}"
+          TIME_RES=${TIMEOUT}/"tr_${TAG}.txt"
+          OUT_DIR=${RESOUT}/"res_${TAG}"
+          DISVIS_PAR="-a ${ANG} -vs ${VS}"
+          TYPE="-g"
+          echo "-------------------------------------"
+          echo "-> Params: angle = ${ANG}  voxel spacing = ${VS}"
+          echo "-> TYPE = ${TAG_TYPE}"
+          echo "-> Run num: ${i}"
+          echo
+          echo "-> Executing:"
+          echo     "${TIME} -f ${TIME_STR} -o ${TIME_RES} ${DOCK_RUN} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+          echo
+          ${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
+
+          if [ ${EXEC} = "docker" ]
+          then
+            docker rm `docker ps -aq`
+          fi
+
+          if [ ${EXEC} = "docker" ]
+          then
+            udocker.py rm `udocker.py ps|cut -d" " -f 1|grep -v CONTAINER`
+          fi
+        done
+      done
+    done
+done
+
+for CASE in "GroEL-GroES" "RsgA-ribosome"
+do
+    CASEDIR=${CASE}
+    if [ ${CASE} = "GroEL-GroES" ]
+    then
+      PDBF=GroES_1gru.pdb
+      MAPF=1046.map
+      RESOL=23.0
+    fi
+
+    if [ ${CASE} = "RsgA-ribosome" ]
+    then
+      PDBF=4adv_V.pdb
+      MAPF=2017.map
+      RESOL=13.3
+    fi
+
+    ANG="4.71"
+    PWRFIT_PAR="-a ${ANG} -l"
+    INPUT_DIR=${WDIR}/${CASEDIR}
+    PDB=${INPUT_DIR}/${PDBF}
+    MAP=${INPUT_DIR}/${MAPF}
+    RESOUT=${WDIR}/${MACH}/res-${CASE}
+    LRESOUT=${LWDIR}/${MACH}/res-${CASE}
+    TIMEOUT=${LWDIR}/${MACH}/time-${CASE}
+    mkdir -p ${LRESOUT}
+    mkdir -p ${TIMEOUT}
+    echo "-> Input files: ${PDB} ${MAP} Resolution: ${RESOL}"
+    DOCK_RUN="${EXEC} run ${DOCK_OPT} ${DOCK_NAME}"
+
+    for i in `seq -w ${NRUNS}`
+    do
+      TAG="ang-${ANG}-type-${TAG_TYPE}-n-${i}"
       TIME_RES=${TIMEOUT}/"tr_${TAG}.txt"
       OUT_DIR=${RESOUT}/"res_${TAG}"
-      DISVIS_PAR="-a ${ANG} -vs ${VS}"
       TYPE="-g"
       echo "-------------------------------------"
-      echo "-> Params: angle = ${ANG}  voxel spacing = ${VS}"
+      echo "-> Params: angle = ${ANG} -l = Use the Laplace pre-filter density data"
       echo "-> TYPE = ${TAG_TYPE}"
       echo "-> Run num: ${i}"
       echo
       echo "-> Executing:"
-      echo     "${TIME} -f ${TIME_STR} -o ${TIME_RES} ${DOCK_RUN} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
+      echo     "${TIME} -f ${TIME_STR} -o ${TIME_RES} ${DOCK_RUN} powerfit ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
       echo
-      ${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
+      ${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} powerfit ${MAP} ${RESOL} ${PDB} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}
 
-        if [ ${CASE} = "PRE5-PUP2-complex" ]
-        then
-          PDBF1=O14250.pdb
-          PDBF2=Q9UT97.pdb
-          CASEDIR=${CASE}
-        fi
+      if [ ${EXEC} = "docker" ]
+      then
+        docker rm `docker ps -aq`
+      fi
 
-
+      if [ ${EXEC} = "docker" ]
+      then
+        udocker.py rm `udocker.py ps|cut -d" " -f 1|grep -v CONTAINER`
+      fi
     done
-  done
 done
-
-# udocker.py rm `udocker.py ps|cut -d" " -f 1|grep -v CONTAINER`

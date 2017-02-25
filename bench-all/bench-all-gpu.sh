@@ -87,12 +87,10 @@ do
         done
       done
     done
-
 done
 
 for CASE in "GroEL-GroES" "RsgA-ribosome"
 do
-
     CASEDIR=${CASE}
     if [ ${CASE} = "GroEL-GroES" ]
     then
