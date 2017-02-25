@@ -32,7 +32,7 @@ MACH=Dock-C7-QK5200
 #MACH=UDock-C7-TK40
 
 # Docker container name
-DOCK_NAME=haddock-centos7-build1
+DOCK_NAME=haddock-centos7-build2
 
 ###############################
 ####### This is for containers Ubuntu16.04
@@ -43,7 +43,7 @@ DOCK_NAME=haddock-centos7-build1
 #MACH=UDock-U16-TK40
 
 # Docker container name
-#DOCK_NAME=haddock-ubuntu16.04-build1
+#DOCK_NAME=haddock-ubuntu16.04-build2
 
 
 # Variables to change by the user, should turn into argument to the script
@@ -51,7 +51,7 @@ CASE="PRE5-PUP2-complex"
 #CASE="RNA-polymerase-II"
 
 # Number of runs of each type for statistical purposes
-NRUNS=5
+NRUNS=10
 
 #############################################################
 # From here on everyhting is fixed
@@ -125,16 +125,16 @@ do
       echo
       ${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
 
-      if [ ${EXEC} = "docker" ]
-      then
-        docker rm `docker ps -aq`
-      fi
+        if [ ${CASE} = "PRE5-PUP2-complex" ]
+        then
+          PDBF1=O14250.pdb
+          PDBF2=Q9UT97.pdb
+          CASEDIR=${CASE}
+        fi
 
-      if [ ${EXEC} = "docker" ]
-      then
-        udocker.py rm `udocker.py ps|cut -d" " -f 1|grep -v CONTAINER`
-      fi
+
     done
   done
 done
 
+# udocker.py rm `udocker.py ps|cut -d" " -f 1|grep -v CONTAINER`
