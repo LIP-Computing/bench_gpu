@@ -123,7 +123,7 @@ do
             docker rm `docker ps -aq`
           fi
 
-          if [ ${EXEC} = "docker" ]
+          if [ ${EXEC} = "udocker.py" ]
           then
             udocker.py rm `udocker.py ps|cut -d" " -f 1|grep -v CONTAINER`
           fi
@@ -183,7 +183,7 @@ do
         docker rm `docker ps -aq`
       fi
 
-      if [ ${EXEC} = "docker" ]
+      if [ ${EXEC} = "udocker.py" ]
       then
         udocker.py rm `udocker.py ps|cut -d" " -f 1|grep -v CONTAINER`
       fi
