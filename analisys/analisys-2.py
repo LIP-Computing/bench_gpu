@@ -66,7 +66,7 @@ if __name__ == '__main__':
         jsres['rtime'] = np.array(jsres['rtime'])
         jsres['mean'] = np.mean(jsres['rtime'])
         jsres['stdev'] = np.std(jsres['rtime'])
-        print jsres['case'], jsres['machine'], jsres['angle'], jsres['voxspac'], jsres['type']
+        #print jsres['case'], jsres['machine'], jsres['angle'], jsres['voxspac'], jsres['type']
 
     for j in ljsres:
         for a in laggrRes:
@@ -112,7 +112,7 @@ if __name__ == '__main__':
         jsres['rtime'] = np.array(jsres['rtime'])
         jsres['mean'] = np.mean(jsres['rtime'])
         jsres['stdev'] = np.std(jsres['rtime'])
-        print jsres['case'], jsres['machine'], jsres['type']
+        #print jsres['case'], jsres['machine'], jsres['type']
     
     for j in ljsres:
         for a in laggrRes:
