@@ -10,7 +10,7 @@ import numpy as np
 
 if __name__ == '__main__':
     # TODO; this is input arg
-    root_dir = "/home/david/Dropbox/AA-work/bench-gpu-3"
+    root_dir = "/home/david/Dropbox/AA-work/bench-run4"
 
     machines = ['Phys-C7-QK5200',
                 'VM-U16-TK40',
@@ -23,13 +23,13 @@ if __name__ == '__main__':
                 'UDock-C7-TK40',
                 'UDock-U16-TK40'
                 ]
-    # cases = ['RNA-polymerase-II', 'PRE5-PUP2-complex']
-    # angles = ['5.0', '10.0']
-    # voxspac = ['1', '2']
+    cases = ['RNA-polymerase-II', 'PRE5-PUP2-complex']
+    angles = ['5.0', '10.0']
+    voxspac = ['1', '2']
 
-    cases = ['PRE5-PUP2-complex']
-    angles = ['5.0']
-    voxspac = ['1']
+    #cases = ['PRE5-PUP2-complex']
+    #angles = ['5.0']
+    #voxspac = ['1']
     types = ['GPU']
     lrunsG = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
     ljsres = []
