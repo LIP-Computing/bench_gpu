@@ -61,4 +61,11 @@ if __name__ == '__main__':
                    yerr=rstdev,
                    error_kw=error_config,
                    label=lbl)
+
+    plt.xlabel('Machine')
+    plt.ylabel('Run time (sec)')
+    plt.title('Something')
+    plt.xticks(index, mc)
+    plt.legend()
+
     plt.show()
