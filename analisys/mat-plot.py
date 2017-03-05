@@ -69,3 +69,18 @@ if __name__ == '__main__':
     plt.legend()
 
     plt.show()
+
+##############
+#fig = plt.figure()
+#plt.plot(urDATE, urPROD, 'ro')
+#plt.xlim(dateInitial,dateFinal)
+#plt.grid(b=None, which='major', axis='y')
+#plt.grid(b=None, which='major', axis='x')
+#plt.title("Urgent GGUS tickets")
+#plt.xlabel("Creation date")
+#plt.ylabel("Solution time (days)")
+#fig.autofmt_xdate()
+#plt.savefig('ggus-UR.pdf')
+#plt.close()
+##############
+
