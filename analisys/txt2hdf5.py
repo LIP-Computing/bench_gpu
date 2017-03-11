@@ -50,6 +50,8 @@ if __name__ == '__main__':
                                 except IOError:
                                     print 'Cannot open', tr_file
                             res = grp1.create_dataset("runtime", data=npres)
+                            res.attrs['mean'] = np.mean(npres)
+                            res.attrs['stdev'] = np.std(npres)
 
         for case in cases['powerfit']:
             for nv in nvidia:
@@ -66,4 +68,6 @@ if __name__ == '__main__':
                         except IOError:
                             print 'Cannot open', tr_file
                     res = grp1.create_dataset("runtime", data=npres)
+                    res.attrs['mean'] = np.mean(npres)
+                    res.attrs['stdev'] = np.std(npres)
 
