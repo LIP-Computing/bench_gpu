@@ -27,6 +27,7 @@ if __name__ == '__main__':
                      'UDock-C7-TK40', 'UDock-U16-TK40']}
 
     lrunsG = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
+    initName = 'time-'
 
     with h5py.File(fout, 'w') as f:
         for case in cases['disvis']:
@@ -38,6 +39,18 @@ if __name__ == '__main__':
                                        case + '-' + angle + '-' + vs + '/' +\
                                        nv + '/' + mach
                             grp1 = f.create_group(grp_name)
+                            npres = np.arange(10)
+                            for n in lrunsG:
+                                tr_file = root_dir + os.sep + mach + os.sep + \
+                                          initName + case + os.sep + 'tr_ang-' + angle + \
+                                          '-vs-' + vs + '-type-GPU' + '-n-' + n + '.txt'
+                                try:
+                                    f = open(tr_file)
+                                    npres[int(n)-1] = float(f.readline())
+                                except IOError:
+                                    print 'Cannot open', tr_file
+                            res = grp1.create_dataset("runtime", data=npres)
+
         for case in cases['powerfit']:
             for nv in nvidia:
                 for mach in machs[nv]:
