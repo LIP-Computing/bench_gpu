@@ -7,6 +7,7 @@
 import os
 import h5py
 import numpy as np
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
@@ -22,18 +23,28 @@ if __name__ == '__main__':
     nvidia = ['QK5200', 'TK40']
 
     machs = {'QK5200': ['Phys-C7-QK5200', 'Dock-C7-QK5200', 'Dock-U16-QK5200',
-                       'UDock-C7-QK5200', 'UDock-U16-QK5200'],
-            'TK40': ['VM-U16-TK40', 'Dock-C7-TK40', 'Dock-U16-TK40',
-                     'UDock-C7-TK40', 'UDock-U16-TK40']}
+                        'UDock-C7-QK5200', 'UDock-U16-QK5200'],
+             'TK40': ['VM-U16-TK40', 'Dock-C7-TK40', 'Dock-U16-TK40',
+                      'UDock-C7-TK40', 'UDock-U16-TK40']}
+
+    machshort = {'QK5200': ['Phys-C7', 'Dock-C7', 'Dock-U16', 'UDock-C7', 'UDock-U16'],
+                 'TK40': ['VM-U16', 'Dock-C7', 'Dock-U16', 'UDock-C7', 'UDock-U16']}
 
     lrunsG = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
     initName = 'time-'
+
+    nbars = 5
+    index = np.arange(nbars)
+    bar_width = 0.35
+    error_config = {'ecolor': '0.3'}
 
     with h5py.File(fout, 'w') as f:
         for case in cases['disvis']:
             for angle in angles:
                 for vs in voxspac:
                     for nv in nvidia:
+                        list_mean = []
+                        list_stdev = []
                         for mach in machs[nv]:
                             grp_name = 'disvis' + '/' +\
                                        case + '-' + angle + '-' + vs + '/' +\
@@ -52,9 +63,25 @@ if __name__ == '__main__':
                             res = grp1.create_dataset("runtime", data=npres)
                             res.attrs['mean'] = np.mean(npres)
                             res.attrs['stdev'] = np.std(npres)
+                            list_mean.append(np.mean(npres))
+                            list_stdev.append(np.std(npres))
+
+                        bplt = plt.bar(index, list_mean, bar_width,
+                                       color='b',
+                                       yerr=list_stdev,
+                                       error_kw=error_config)
+                
+                        plt.xlabel('Machine')
+                        plt.ylabel('Run time (sec)')
+                        plt.title('disvis ' + case + ' ' + angle + ' ' + vs + ' ' + nv)
+                        plt.xticks(index, machshort[nv])
+                        plt.legend()
+                        plt.savefig(root_dir + '/' + 'disvis ' + case + '-' + angle + '-' + vs + '-' + nv + '.png')
 
         for case in cases['powerfit']:
             for nv in nvidia:
+                list_mean = []
+                list_stdev = []
                 for mach in machs[nv]:
                     grp_name = 'powerfit' + '/' + case + '/' + nv + '/' + mach
                     grp1 = f.create_group(grp_name)
@@ -70,4 +97,16 @@ if __name__ == '__main__':
                     res = grp1.create_dataset("runtime", data=npres)
                     res.attrs['mean'] = np.mean(npres)
                     res.attrs['stdev'] = np.std(npres)
+                    list_mean.append(np.mean(npres))
+                    list_stdev.append(np.std(npres))
 
+                bplt = plt.bar(index, list_mean, bar_width,
+                               color='b',
+                               yerr=list_stdev,
+                               error_kw=error_config)
+                
+                plt.xlabel('Machine')
+                plt.ylabel('Run time (sec)')
+                plt.title('powerfit ' + case + ' ' + nv)
+                plt.xticks(index, machshort[nv])
+                plt.legend()
