@@ -12,128 +12,35 @@ if __name__ == '__main__':
 
     root_dir = "/home/david/Dropbox/AA-work/bench-run4"
     fout = root_dir + "/bench.hdf"
-    cases = ['RNA-polymerase-II',
-             'PRE5-PUP2-complex',
-             'GroEL-GroES',
-             'RsgA-ribosome']
+    haddocks = ['disvis', 'powerfit']
+    cases = {'disvis': ['RNA-polymerase-II', 'PRE5-PUP2-complex'],
+             'powerfit': ['GroEL-GroES', 'RsgA-ribosome']}
 
     angles = ['5.0', '10.0']
     voxspac = ['1', '2']
-    types = ['GPU']
+    type = 'GPU'
     nvidia = ['QK5200', 'TK40']
 
-    machines = ['Phys-C7-QK5200',
-                'VM-U16-TK40',
-                'Dock-C7-QK5200',
-                'Dock-C7-TK40',
-                'Dock-U16-QK5200',
-                'Dock-U16-TK40',
-                'UDock-C7-QK5200',
-                'UDock-U16-QK5200',
-                'UDock-C7-TK40',
-                'UDock-U16-TK40'
-                ]
+    machs = {'QK5200': ['Phys-C7-QK5200', 'Dock-C7-QK5200', 'Dock-U16-QK5200',
+                       'UDock-C7-QK5200', 'UDock-U16-QK5200'],
+            'TK40': ['VM-U16-TK40', 'Dock-C7-TK40', 'Dock-U16-TK40',
+                     'UDock-C7-TK40', 'UDock-U16-TK40']}
 
     lrunsG = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
 
     with h5py.File(fout, 'w') as f:
-
-
-
-
-    ljsres = []
-    laggrRes = []
-
-    i = 0 # index of machine type matches the index of total number of cores
-    for mach in machines:
-        initName = 'time-'
-        for cs in cases:
-            for ang in angles:
+        for case in cases['disvis']:
+            for angle in angles:
                 for vs in voxspac:
-                    aggrRes = {'machine': mach, 'case': cs, 'angle': ang,
-                               'voxspac': vs,
-                               'GPU': {'mean': None, 'stdev': None}}
-                    laggrRes.append(aggrRes)
-                    jsres = {'machine': mach, 'case': cs, 'angle': ang,
-                             'voxspac': vs, 'type': 'GPU', 'rtime': []}
-                    for n in lrunsG:
-                        tr_file = root_dir + os.sep + mach + os.sep + \
-                            initName + cs + os.sep + 'tr_ang-' + ang + \
-                            '-vs-' + vs + '-type-GPU' + '-n-' + n + '.txt'
-                        try:
-                            f = open(tr_file)
-                            #print '-> File: %s' % tr_file
-                            s = f.readline()
-                            rtime = float(s)
-                            jsres['rtime'].append(rtime)
-                        except IOError:
-                            print 'Cannot open', tr_file
-                    ljsres.append(jsres)
-        i += 1
-
-    for jsres in ljsres:
-        jsres['rtime'] = np.array(jsres['rtime'])
-        jsres['mean'] = np.mean(jsres['rtime'])
-        jsres['stdev'] = np.std(jsres['rtime'])
-        #print jsres['case'], jsres['machine'], jsres['angle'], jsres['voxspac'], jsres['type']
-
-    for j in ljsres:
-        for a in laggrRes:
-            if j['case'] == a['case'] and j['machine'] == a['machine'] and \
-               j['angle'] == a['angle'] and j['voxspac'] == a['voxspac']:
-                if j['type'] == 'GPU':
-                    a['GPU']['mean'] = j['mean']
-                    a['GPU']['stdev'] = j['stdev']
-
-    print '--------------------------------------'
-    print 'Case\tMachine\tAngle\tVoxSpac\tTimeGPU (sec)\tSTDev (sec)'
-    for a in laggrRes:
-        print '%s\t%s\t%s\t%s\t%5.1f\t%5.1f' % \
-            (a['case'], a['machine'], a['angle'], a['voxspac'], a['GPU']['mean'], a['GPU']['stdev'])
-
-    print '--------------------------------------'
-    print '--------------------------------------'
-    cases = ['GroEL-GroES', 'RsgA-ribosome']
-    ljsres = []
-    laggrRes = []
-    i = 0  # index of machine type matches the index of total number of cores
-    for mach in machines:
-        initName = 'time-'
-        for cs in cases:
-            aggrRes = {'machine': mach, 'case': cs, 'GPU': {'mean': None, 'stdev': None}}
-            laggrRes.append(aggrRes)
-            jsres = {'machine': mach, 'case': cs, 'type': 'GPU', 'rtime': []}
-            for n in lrunsG:
-                tr_file = root_dir + os.sep + mach + os.sep + initName + cs + os.sep + 'tr_ang-4.71' + \
-                          '-type-GPU' + '-n-' + n + '.txt'
-                try:
-                    f = open(tr_file)
-                    # print '-> File: %s' % tr_file
-                    s = f.readline()
-                    rtime = float(s)
-                    jsres['rtime'].append(rtime)
-                except IOError:
-                    print 'Cannot open', tr_file
-            ljsres.append(jsres)
-        i += 1
-    
-    for jsres in ljsres:
-        jsres['rtime'] = np.array(jsres['rtime'])
-        jsres['mean'] = np.mean(jsres['rtime'])
-        jsres['stdev'] = np.std(jsres['rtime'])
-        #print jsres['case'], jsres['machine'], jsres['type']
-    
-    for j in ljsres:
-        for a in laggrRes:
-            if j['case'] == a['case'] and j['machine'] == a['machine']:
-                if j['type'] == 'GPU':
-                    a['GPU']['mean'] = j['mean']
-                    a['GPU']['stdev'] = j['stdev']
-    
-    print '--------------------------------------'
-    print 'Case\tMachine\tTimeGPU (sec)\tSTDev (sec)'
-    for a in laggrRes:
-        print '%s\t%s\t%5.1f\t%5.1f' % \
-              (a['case'], a['machine'], a['GPU']['mean'], a['GPU']['stdev'])
-
+                    for nv in nvidia:
+                        for mach in machs[nv]:
+                            grp_name = 'disvis' + '/' +\
+                                       case + '-' + angle + '-' + vs + '/' +\
+                                       nv + '/' + mach
+                            grp1 = f.create_group(grp_name)
+        for case in cases['powerfit']:
+            for nv in nvidia:
+                for mach in machs[nv]:
+                    grp_name = 'powerfit' + '/' + case + '/' + nv + '/' + mach
+                    grp2 = f.create_group(grp_name)
 
