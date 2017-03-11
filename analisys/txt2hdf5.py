@@ -45,8 +45,8 @@ if __name__ == '__main__':
                                           initName + case + os.sep + 'tr_ang-' + angle + \
                                           '-vs-' + vs + '-type-GPU' + '-n-' + n + '.txt'
                                 try:
-                                    f = open(tr_file)
-                                    npres[int(n)-1] = float(f.readline())
+                                    fraw = open(tr_file)
+                                    npres[int(n)-1] = float(fraw.readline())
                                 except IOError:
                                     print 'Cannot open', tr_file
                             res = grp1.create_dataset("runtime", data=npres)
@@ -55,5 +55,15 @@ if __name__ == '__main__':
             for nv in nvidia:
                 for mach in machs[nv]:
                     grp_name = 'powerfit' + '/' + case + '/' + nv + '/' + mach
-                    grp2 = f.create_group(grp_name)
+                    grp1 = f.create_group(grp_name)
+                    npres = np.arange(10)
+                    for n in lrunsG:
+                        tr_file = root_dir + os.sep + mach + os.sep + initName + case + os.sep + 'tr_ang-4.71' + \
+                                  '-type-GPU' + '-n-' + n + '.txt'
+                        try:
+                            fraw = open(tr_file)
+                            npres[int(n) - 1] = float(fraw.readline())
+                        except IOError:
+                            print 'Cannot open', tr_file
+                    res = grp1.create_dataset("runtime", data=npres)
 
