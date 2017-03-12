@@ -66,13 +66,17 @@ if __name__ == '__main__':
                             list_mean.append(np.mean(npres))
                             list_stdev.append(np.std(npres))
 
+                        ymin = np.amin(list_mean) - 100.0
+                        ymax = np.amax(list_mean) + 100.0
                         bplt = plt.bar(index, list_mean, bar_width,
                                        color='b',
                                        yerr=list_stdev,
-                                       error_kw=error_config)
+                                       error_kw=error_config,
+                                       label='Run Time (s)')
                 
                         plt.xlabel('Machine')
                         plt.ylabel('Run time (sec)')
+                        plt.ylim([ymin, ymax])
                         plt.title('disvis ' + case + ' ' + angle + ' ' + vs + ' ' + nv)
                         plt.xticks(index, machshort[nv])
                         plt.legend()
@@ -100,13 +104,17 @@ if __name__ == '__main__':
                     list_mean.append(np.mean(npres))
                     list_stdev.append(np.std(npres))
 
+                ymin = np.amin(list_mean) - 100.0
+                ymax = np.amax(list_mean) + 100.0
                 bplt = plt.bar(index, list_mean, bar_width,
                                color='b',
                                yerr=list_stdev,
-                               error_kw=error_config)
+                               error_kw=error_config,
+                               label='Run Time (s)')
                 
                 plt.xlabel('Machine')
                 plt.ylabel('Run time (sec)')
+                plt.ylim([ymin, ymax])
                 plt.title('powerfit ' + case + ' ' + nv)
                 plt.xticks(index, machshort[nv])
                 plt.legend()
