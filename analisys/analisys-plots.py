@@ -9,6 +9,39 @@ import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+def is_outlier(points, thresh=3.5):
+    """
+    Returns a boolean array with True if points are outliers and False
+    otherwise.
+    Parameters:
+    -----------
+        points : An numobservations by numdimensions array of observations
+        thresh : The modified z-score to use as a threshold. Observations with
+            a modified z-score (based on the median absolute deviation) greater
+            than this value will be classified as outliers.
+    Returns:
+    --------
+        mask : A numobservations-length boolean array.
+    References:
+    ----------
+        Boris Iglewicz and David Hoaglin (1993), "Volume 16: How to Detect and
+        Handle Outliers", The ASQC Basic References in Quality Control:
+        Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.
+    """
+    if len(points.shape) == 1:
+        points = points[:, None]
+    median = np.median(points, axis=0)
+    diff = np.sum((points - median)**2, axis=-1)
+    diff = np.sqrt(diff)
+    med_abs_deviation = np.median(diff)
+    #print diff, med_abs_deviation
+
+    modified_z_score = 0.6745 * diff / med_abs_deviation
+
+    return modified_z_score > thresh
+
+
 if __name__ == '__main__':
 
     root_dir = "/home/david/Dropbox/AA-work/bench-run4"
@@ -61,6 +94,11 @@ if __name__ == '__main__':
                                 except IOError:
                                     print 'Cannot open', tr_file
                             npres.sort()
+                            outl_mask = is_outlier(npres, 4.5)
+                            print '----------------------------'
+                            print grp_name
+                            print npres
+                            print outl_mask
                             res = grp1.create_dataset("runtime", data=npres)
                             res.attrs['mean'] = np.mean(npres)
                             res.attrs['stdev'] = np.std(npres)
@@ -103,6 +141,11 @@ if __name__ == '__main__':
                         except IOError:
                             print 'Cannot open', tr_file
                     npres.sort()
+                    outl_mask = is_outlier(npres, 4.5)
+                    print '----------------------------'
+                    print grp_name
+                    print npres
+                    print outl_mask
                     res = grp1.create_dataset("runtime", data=npres)
                     res.attrs['mean'] = np.mean(npres)
                     res.attrs['stdev'] = np.std(npres)
