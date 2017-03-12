@@ -60,6 +60,7 @@ if __name__ == '__main__':
                                     npres[int(n)-1] = float(fraw.readline())
                                 except IOError:
                                     print 'Cannot open', tr_file
+                            npres.sort()
                             res = grp1.create_dataset("runtime", data=npres)
                             res.attrs['mean'] = np.mean(npres)
                             res.attrs['stdev'] = np.std(npres)
@@ -101,6 +102,7 @@ if __name__ == '__main__':
                             npres[int(n) - 1] = float(fraw.readline())
                         except IOError:
                             print 'Cannot open', tr_file
+                    npres.sort()
                     res = grp1.create_dataset("runtime", data=npres)
                     res.attrs['mean'] = np.mean(npres)
                     res.attrs['stdev'] = np.std(npres)
