@@ -36,7 +36,7 @@ if __name__ == '__main__':
     nbars = 5
     index = np.arange(nbars)
     bar_width = 0.35
-    error_config = {'ecolor': '0.3'}
+    error_config = {'ecolor': '#000000', 'lw': 2, 'capsize': 5, 'capthick': 2}
 
     with h5py.File(fout, 'w') as f:
         for case in cases['disvis']:
@@ -66,21 +66,24 @@ if __name__ == '__main__':
                             list_mean.append(np.mean(npres))
                             list_stdev.append(np.std(npres))
 
-                        ymin = np.amin(list_mean) - 100.0
-                        ymax = np.amax(list_mean) + 100.0
-                        bplt = plt.bar(index, list_mean, bar_width,
-                                       color='b',
-                                       yerr=list_stdev,
-                                       error_kw=error_config,
-                                       label='Run Time (s)')
+                        ymin = np.amin(list_mean) - 1.5*np.amax(list_stdev)
+                        ymax = np.amax(list_mean) + 1.5*np.amax(list_stdev)
+                        fig = plt.figure()
+                        plt.bar(index, list_mean, bar_width,
+                                color='#ECBDA3',
+                                yerr=list_stdev,
+                                error_kw=error_config,
+                                label='Time (s)')
                 
                         plt.xlabel('Machine')
                         plt.ylabel('Run time (sec)')
-                        plt.ylim([ymin, ymax])
-                        plt.title('disvis ' + case + ' ' + angle + ' ' + vs + ' ' + nv)
+                        plt.ylim((ymin, ymax))
+                        plt.title('Disvis: case = ' + case + '\n Angle = ' + angle +
+                                  ' Voxelspacing = ' + vs + ' GPU = ' + nv)
                         plt.xticks(index, machshort[nv])
+                        plt.grid(b=None, which='major', axis='y')
                         plt.legend()
-                        plt.savefig(root_dir + '/' + 'disvis ' + case + '-' + angle + '-' + vs + '-' + nv + '.png')
+                        plt.savefig(root_dir + '/plots/' + 'disvis ' + case + '-' + angle + '-' + vs + '-' + nv + '.png')
 
         for case in cases['powerfit']:
             for nv in nvidia:
@@ -104,17 +107,20 @@ if __name__ == '__main__':
                     list_mean.append(np.mean(npres))
                     list_stdev.append(np.std(npres))
 
-                ymin = np.amin(list_mean) - 100.0
-                ymax = np.amax(list_mean) + 100.0
-                bplt = plt.bar(index, list_mean, bar_width,
-                               color='b',
-                               yerr=list_stdev,
-                               error_kw=error_config,
-                               label='Run Time (s)')
+                ymin = np.amin(list_mean) - 1.5*np.amax(list_stdev)
+                ymax = np.amax(list_mean) + 1.5*np.amax(list_stdev)
+                fig = plt.figure()
+                plt.bar(index, list_mean, bar_width,
+                        color='#ECBDA3',
+                        yerr=list_stdev,
+                        error_kw=error_config,
+                        label='Time (s)')
                 
                 plt.xlabel('Machine')
                 plt.ylabel('Run time (sec)')
-                plt.ylim([ymin, ymax])
-                plt.title('powerfit ' + case + ' ' + nv)
+                plt.ylim((ymin, ymax))
+                plt.title('Powerfit: Case = ' + case + '\n GPU = ' + nv)
                 plt.xticks(index, machshort[nv])
+                plt.grid(b=None, which='major', axis='y')
                 plt.legend()
+                plt.savefig(root_dir + '/plots/' + 'powerfit ' + case + '-' + nv + '.png')
