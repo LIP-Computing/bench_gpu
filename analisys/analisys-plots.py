@@ -161,6 +161,7 @@ if __name__ == '__main__':
                                   ' Voxelspacing = ' + vs + ' GPU = ' + nv)
                         plt.xticks(index, machshort[nv])
                         plt.grid(b=None, which='major', axis='y')
+                        plt.axhline(y=1.0, color='b', linestyle='-')
                         plt.legend()
                         plt.savefig(root_dir + '/plots/' + 'ratio-disvis ' +
                                     case + '-' + angle + '-' + vs + '-' + nv + '.png')
@@ -235,6 +236,7 @@ if __name__ == '__main__':
                 plt.title('Powerfit: Case = ' + case + '\n GPU = ' + nv)
                 plt.xticks(index, machshort[nv])
                 plt.grid(b=None, which='major', axis='y')
+                plt.axhline(y=1.0, color='b', linestyle='-')
                 plt.legend()
                 plt.savefig(root_dir + '/plots/' + 'ratio-powerfit ' + case + '-' + nv + '.png')
                 plt.close(fig)
