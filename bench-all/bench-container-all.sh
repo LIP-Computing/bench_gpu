@@ -38,7 +38,7 @@ MACH=Dock-C7-QK5200
 #MACH=UDock-C7-TK40
 
 # Docker container name
-DOCK_NAME=haddock-centos7-build2
+DOCK_NAME=haddock-centos7-b5
 
 ###############################
 ####### This is for containers Ubuntu16.04
@@ -49,7 +49,7 @@ DOCK_NAME=haddock-centos7-build2
 #MACH=UDock-U16-TK40
 
 # Docker container name
-#DOCK_NAME=haddock-ubuntu16.04-build2
+#DOCK_NAME=haddock-ubuntu16.04-b5
 
 #############################################################
 # From here on everyhting is fixed
