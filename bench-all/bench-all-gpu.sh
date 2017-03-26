@@ -21,18 +21,18 @@
 #
 
 # Number of runs of each type for statistical purposes
-NRUNS=10
-WDIR="/cloud/root/bench-run4"
+NRUNS=20
+WDIR="/cloud/root/bench-run5"
 
 # This is for physical machines or VMs
-MACH=Phys-C7-QK2200
-#MACH=Phys-C7-QK5200
+#MACH=Phys-C7-QK2200
+MACH=Phys-C7-QK5200
 #MACH=VM-U16-TK40
 
 #############################################################
 # From here on everyhting is fixed
 TIME="/usr/bin/time"
-TIME_STR="%e\ntime = %e sec"
+TIME_STR="%e"
 
 #TYPE is either -g for GPU or -p NN for CPU NN processes
 TAG_TYPE="GPU"
