@@ -69,6 +69,10 @@ do
       do
         for VS in "2" "1"
         do
+          if [ ${CASE} = "RNA-polymerase-II" && ${ANG} = "5.0" && ${VS} = "1" ]
+          then
+            continue
+          fi
           TAG="ang-${ANG}-vs-${VS}-type-${TAG_TYPE}-n-${i}"
           TIME_RES=${TIMEOUT}/"tr_${TAG}.txt"
           OUT_DIR=${RESOUT}/"res_${TAG}"
@@ -139,3 +143,28 @@ do
     done
 
 done
+
+CASE="gromacs"
+INPUT_DIR=${WDIR}/${CASE}
+RESOUT=${WDIR}/res-${CASE}
+TIMEOUT=${WDIR}/${MACH}/time-${CASE}
+INFILE=${WDIR}/${CASE}/md.tpr
+
+for i in `seq -w ${NRUNS}`
+do
+  TAG="n-${i}"
+  TIME_RES=${TIMEOUT}/"tr_${TAG}.txt"
+  OUT_DIR=${RESOUT}/"res_${TAG}"
+  echo "-------------------------------------"
+  echo "-> Run num: ${i}"
+  echo
+  echo "-> Executing:"
+  echo     "${TIME} -f "${TIME_STR}" -o ${TIME_RES} gmx mdrun -s ${INFILE} -ntomp 0 -gpu_id 0"
+  echo
+  mkdir -p ${OUT_DIR}
+  cd ${OUT_DIR}
+  ${TIME} -f "${TIME_STR}" -o ${TIME_RES} gmx mdrun -s ${INFILE} -ntomp 0 -gpu_id 0
+  cd ..
+  rm -rf ${OUT_DIR}
+done
+
