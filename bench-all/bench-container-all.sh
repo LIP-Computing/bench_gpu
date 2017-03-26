@@ -21,12 +21,14 @@
 #
 
 # Number of runs of each type for statistical purposes
-NRUNS=10
-LWDIR="/cloud/root/bench-run4"
+NRUNS=20
+ROOT_DIR="/cloud/root"
+LWDIR="${ROOT_DIR}/bench-run5"
+PATH=${ROOT_DIR}/udocker:${PATH}
 
 # Run docker or udocker
 EXEC="docker"
-#EXEC="udocker.py"
+#EXEC="udocker"
 
 ####### This is for containers Centos7
 MACH=Dock-C7-QK5200
@@ -53,12 +55,12 @@ DOCK_NAME=haddock-centos7-build2
 # From here on everyhting is fixed
 WDIR='/home'  # Working dir inside the docker
 TIME="/usr/bin/time"
-TIME_STR="%e\ntime = %e sec"
+TIME_STR="%e"
 DOCK_NVD="--device=/dev/nvidia0:/dev/nvidia0 \
           --device=/dev/nvidiactl:/dev/nvidiactl \
           --device=/dev/nvidia-uvm:/dev/nvidia-uvm"
-VDIR="-v ${LWDIR}:${WDIR}"
 
+VDIR="-v ${LWDIR}:${WDIR}"
 DOCK_OPT="${VDIR}"
 
 if [ ${EXEC} = "docker" ]
