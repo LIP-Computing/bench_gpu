@@ -22,12 +22,16 @@
 
 # Number of runs of each type for statistical purposes
 NRUNS=20
-WDIR="/cloud/root/bench-run5"
+ROOT_DIR=/cloud/root
+ROOT_INPUT_DIR=${ROOT_DIR}/bench-input
+OUT_DIR=${ROOT_DIR}/bench-run5
+R_OUT_DIR=${OUT_DIR}/results
+T_OUT_DIR=${OUT_DIR}/time
 
 # This is for physical machines or VMs
-#MACH=Phys-C7-QK2200
 MACH=Phys-C7-QK5200
 #MACH=VM-U16-TK40
+#MACH=Phys-C7-QK2200
 
 #############################################################
 # From here on everyhting is fixed
@@ -53,12 +57,12 @@ do
       CASEDIR=${CASE}/A-E
     fi
 
-    INPUT_DIR=${WDIR}/${CASEDIR}
+    INPUT_DIR=${ROOT_INPUT_DIR}/${CASEDIR}
     PDB1=${INPUT_DIR}/${PDBF1}
     PDB2=${INPUT_DIR}/${PDBF2}
     REST=${INPUT_DIR}/restraints.dat
-    RESOUT=${WDIR}/res-${CASE}
-    TIMEOUT=${WDIR}/${MACH}/time-${CASE}
+    RESOUT=${R_OUT_DIR}/res-${CASE}
+    TIMEOUT=${T_OUT_DIR}/${MACH}/time-${CASE}
     mkdir -p ${RESOUT}
     mkdir -p ${TIMEOUT}
     echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
@@ -113,11 +117,11 @@ do
     ANG="4.71"
     PWRFIT_PAR="-a ${ANG} -l"
 
-    INPUT_DIR=${WDIR}/${CASEDIR}
+    INPUT_DIR=${ROOT_INPUT_DIR}/${CASEDIR}
     PDB=${INPUT_DIR}/${PDBF}
     MAP=${INPUT_DIR}/${MAPF}
-    RESOUT=${WDIR}/res-${CASE}
-    TIMEOUT=${WDIR}/${MACH}/time-${CASE}
+    RESOUT=${R_OUT_DIR}/res-${CASE}
+    TIMEOUT=${T_OUT_DIR}/${MACH}/time-${CASE}
 
     mkdir -p ${RESOUT}
     mkdir -p ${TIMEOUT}
@@ -145,10 +149,10 @@ do
 done
 
 CASE="gromacs"
-INPUT_DIR=${WDIR}/${CASE}
-RESOUT=${WDIR}/res-${CASE}
-TIMEOUT=${WDIR}/${MACH}/time-${CASE}
-INFILE=${WDIR}/${CASE}/md.tpr
+INPUT_DIR=${ROOT_INPUT_DIR}/${CASE}
+RESOUT=${R_OUT_DIR}/res-${CASE}
+TIMEOUT=${T_OUT_DIR}/${MACH}/time-${CASE}
+INFILE=${INPUT_DIR}/${CASE}/md.tpr
 . /usr/local/gromacs/bin/GMXRC.bash
 
 for i in `seq -w ${NRUNS}`
