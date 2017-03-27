@@ -22,16 +22,16 @@
 
 # Number of runs of each type for statistical purposes
 NRUNS=20
+# This is for physical machines or VMs
+MACH=Phys-C7-QK5200
+#MACH=VM-U16-TK40
+
 ROOT_DIR=/cloud/root
+
 ROOT_INPUT_DIR=${ROOT_DIR}/bench-input
 OUT_DIR=${ROOT_DIR}/bench-run5
 R_OUT_DIR=${OUT_DIR}/results
 T_OUT_DIR=${OUT_DIR}/time
-
-# This is for physical machines or VMs
-MACH=Phys-C7-QK5200
-#MACH=VM-U16-TK40
-#MACH=Phys-C7-QK2200
 
 #############################################################
 # From here on everyhting is fixed
@@ -91,7 +91,6 @@ do
           echo     "${TIME} -f ${TIME_STR} -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}"
           echo
           ${TIME} -f "${TIME_STR}" -o ${TIME_RES} disvis ${PDB1} ${PDB2} ${REST} ${DISVIS_PAR} ${TYPE} -d ${OUT_DIR}
-          rm -rf ${OUT_DIR}
         done
       done
     done
@@ -143,7 +142,6 @@ do
       echo     "${TIME} -f ${TIME_STR} -o ${TIME_RES} powerfit ${MAP} ${RESOL} ${PDB} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}"
       echo
       ${TIME} -f "${TIME_STR}" -o ${TIME_RES} powerfit ${MAP} ${RESOL} ${PDB} ${PWRFIT_PAR} ${TYPE} -d ${OUT_DIR}
-      rm -rf ${OUT_DIR}
     done
 
 done
@@ -169,7 +167,5 @@ do
   mkdir -p ${OUT_DIR}
   cd ${OUT_DIR}
   ${TIME} -f "${TIME_STR}" -o ${TIME_RES} gmx mdrun -s ${INFILE} -ntomp 0 -gpu_id 0
-  cd ..
-  rm -rf ${OUT_DIR}
 done
 
