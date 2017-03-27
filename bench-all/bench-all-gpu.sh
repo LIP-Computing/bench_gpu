@@ -73,7 +73,7 @@ do
       do
         for VS in "2" "1"
         do
-          if [ ${CASE} = "RNA-polymerase-II" && ${ANG} = "5.0" && ${VS} = "1" ]
+          if [ ${CASE} = "RNA-polymerase-II" ] && [ ${ANG} = "5.0" ] && [ ${VS} = "1" ]
           then
             continue
           fi
