@@ -25,12 +25,17 @@ NRUNS=20
 NVIDIA=QK5200
 #NVIDIA=TK40
 ROOT_DIR=/cloud/root
+OUT_DIR=${ROOT_DIR}/bench-run5
 
 ROOT_INPUT_DIR=${ROOT_DIR}/bench-input
-OUT_DIR=${ROOT_DIR}/bench-run5
 R_OUT_DIR=${OUT_DIR}/results
 T_OUT_DIR=${OUT_DIR}/time
 PATH=${ROOT_DIR}/udocker:${PATH}
+TIME="/usr/bin/time"
+TIME_STR="%e"
+DOCK_NVD="--device=/dev/nvidia0:/dev/nvidia0 \
+          --device=/dev/nvidiactl:/dev/nvidiactl \
+          --device=/dev/nvidia-uvm:/dev/nvidia-uvm"
 
 for OS in "C7" "U16"
 do
@@ -59,18 +64,8 @@ do
             MACH="UDock-${OS}-${NVIDIA}"
         fi
 
-
-        #############################################################
-        # From here on everyhting is fixed
-        TIME="/usr/bin/time"
-        TIME_STR="%e"
-        DOCK_NVD="--device=/dev/nvidia0:/dev/nvidia0 \
-                  --device=/dev/nvidiactl:/dev/nvidiactl \
-                  --device=/dev/nvidia-uvm:/dev/nvidia-uvm"
-
         VDIR="-v ${ROOT_INPUT_DIR}:/home/input -v ${R_OUT_DIR}:/home/output"
         DOCK_OPT="${VDIR}"
-
         if [ ${EXEC} = "docker" ]
         then
           DOCK_OPT="${DOCK_NVD} ${VDIR}"
@@ -78,7 +73,6 @@ do
 
         #TYPE is either -g for GPU or -p NN for CPU NN processes
         TAG_TYPE="GPU"
-
         for CASE in "PRE5-PUP2-complex" "RNA-polymerase-II"
         do
             if [ ${CASE} = "PRE5-PUP2-complex" ]
@@ -150,7 +144,6 @@ do
 
         for CASE in "GroEL-GroES" "RsgA-ribosome"
         do
-            CASEDIR=${CASE}
             if [ ${CASE} = "GroEL-GroES" ]
             then
               PDBF=GroES_1gru.pdb
@@ -173,7 +166,7 @@ do
             mkdir -p ${RESOUT}
             mkdir -p ${TIMEOUT}
 
-            INPUT_DIR=/home/input/${CASEDIR}
+            INPUT_DIR=/home/input/${CASE}
             OUTPUT_DIR=/home/output/${MACH}/res-${CASE}
             PDB=${INPUT_DIR}/${PDBF}
             MAP=${INPUT_DIR}/${MAPF}
