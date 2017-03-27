@@ -150,7 +150,7 @@ CASE="gromacs"
 INPUT_DIR=${ROOT_INPUT_DIR}/${CASE}
 RESOUT=${R_OUT_DIR}/res-${CASE}
 TIMEOUT=${T_OUT_DIR}/${MACH}/time-${CASE}
-INFILE=${INPUT_DIR}/${CASE}/md.tpr
+INFILE=${INPUT_DIR}/md.tpr
 . /usr/local/gromacs/bin/GMXRC.bash
 
 for i in `seq -w ${NRUNS}`
