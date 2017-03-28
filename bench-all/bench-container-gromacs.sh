@@ -92,9 +92,9 @@ do
           echo "-> Run num: ${i}"
           echo
           echo "-> Executing:"
-          echo     "${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} gmx mdrun -s ${INFILE} -ntomp 0 -gpu_id 0"
+          echo     "${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} gmx mdrun -s ${INFILE} -ntomp 8 -gpu_id 0"
           echo
-          ${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} gmx mdrun -s ${INFILE} -ntomp 0 -gpu_id 0
+          ${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} gmx mdrun -s ${INFILE} -ntomp 8 -gpu_id 0
         done
     done
 done

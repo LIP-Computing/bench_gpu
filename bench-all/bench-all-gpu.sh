@@ -153,6 +153,9 @@ TIMEOUT=${T_OUT_DIR}/${MACH}/time-${CASE}
 INFILE=${INPUT_DIR}/md.tpr
 . /usr/local/gromacs/bin/GMXRC.bash
 
+mkdir -p ${RESOUT}
+mkdir -p ${TIMEOUT}
+
 for i in `seq -w ${NRUNS}`
 do
   TAG="n-${i}"
@@ -162,10 +165,10 @@ do
   echo "-> Run num: ${i}"
   echo
   echo "-> Executing:"
-  echo     "${TIME} -f "${TIME_STR}" -o ${TIME_RES} gmx mdrun -s ${INFILE} -ntomp 0 -gpu_id 0"
+  echo     "${TIME} -f "${TIME_STR}" -o ${TIME_RES} gmx mdrun -s ${INFILE} -ntomp 8 -gpu_id 0"
   echo
   mkdir -p ${OUT_DIR}
   cd ${OUT_DIR}
-  ${TIME} -f "${TIME_STR}" -o ${TIME_RES} gmx mdrun -s ${INFILE} -ntomp 0 -gpu_id 0
+  ${TIME} -f "${TIME_STR}" -o ${TIME_RES} gmx mdrun -s ${INFILE} -ntomp 8 -gpu_id 0
 done
 
