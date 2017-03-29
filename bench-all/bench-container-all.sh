@@ -36,10 +36,10 @@ TIME_STR="%e"
 DOCK_NVD="--device=/dev/nvidia0:/dev/nvidia0 \
           --device=/dev/nvidiactl:/dev/nvidiactl \
           --device=/dev/nvidia-uvm:/dev/nvidia-uvm"
+CONT_NAME=haddock
 
 for OS in "C7" "U16"
 do
-
     # Haddock Disvis and Powerfit
     if [ ${OS} = "C7" ]
     then
@@ -53,22 +53,21 @@ do
 
     for EXEC in "docker" "udocker"
     do
+        VDIR="-v ${ROOT_INPUT_DIR}:/home/input -v ${R_OUT_DIR}:/home/output"
+        DOCK_OPT="${VDIR}"
 
         if [ ${EXEC} = "docker" ]
         then
             MACH="Dock-${OS}-${NVIDIA}"
+            DOCK_OPT="${DOCK_NVD} ${VDIR}"
+            DOCK_RUN="${EXEC} run ${DOCK_OPT} --name ${CONT_NAME} ${DOCK_NAME}"
         fi
 
         if [ ${EXEC} = "udocker" ]
         then
             MACH="UDock-${OS}-${NVIDIA}"
-        fi
-
-        VDIR="-v ${ROOT_INPUT_DIR}:/home/input -v ${R_OUT_DIR}:/home/output"
-        DOCK_OPT="${VDIR}"
-        if [ ${EXEC} = "docker" ]
-        then
-          DOCK_OPT="${DOCK_NVD} ${VDIR}"
+            ${EXEC} create ${DOCK_OPT} --name=${CONT_NAME} ${DOCK_NAME}
+            DOCK_RUN="${EXEC} run ${CONT_NAME}"
         fi
 
         #TYPE is either -g for GPU or -p NN for CPU NN processes
@@ -91,18 +90,15 @@ do
 
             RESOUT=${R_OUT_DIR}/${MACH}/res-${CASE}
             TIMEOUT=${T_OUT_DIR}/${MACH}/time-${CASE}
-            mkdir -p ${RESOUT}
-            mkdir -p ${TIMEOUT}
-
             INPUT_DIR=/home/input/${CASEDIR}
             OUTPUT_DIR=/home/output/${MACH}/res-${CASE}
             PDB1=${INPUT_DIR}/${PDBF1}
             PDB2=${INPUT_DIR}/${PDBF2}
             REST=${INPUT_DIR}/restraints.dat
 
+            mkdir -p ${RESOUT}
+            mkdir -p ${TIMEOUT}
             echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
-            DOCK_RUN="${EXEC} run ${DOCK_OPT} ${DOCK_NAME}"
-
             for i in `seq -w ${NRUNS}`
             do
               for ANG in "10.0" "5.0"
@@ -130,20 +126,15 @@ do
 
                   if [ ${EXEC} = "docker" ]
                   then
-                    docker rm `docker ps -aq`
-                  fi
-
-                  if [ ${EXEC} = "udocker" ]
-                  then
-                    udocker rm `udocker ps|cut -d" " -f 1|grep -v CONTAINER`
+                    docker rm ${CONT_NAME}
                   fi
                 done
               done
             done
-        done
+            done
 
-        for CASE in "GroEL-GroES" "RsgA-ribosome"
-        do
+            for CASE in "GroEL-GroES" "RsgA-ribosome"
+            do
             if [ ${CASE} = "GroEL-GroES" ]
             then
               PDBF=GroES_1gru.pdb
@@ -160,19 +151,16 @@ do
 
             ANG="4.71"
             PWRFIT_PAR="-a ${ANG} -l"
-
             RESOUT=${R_OUT_DIR}/${MACH}/res-${CASE}
             TIMEOUT=${T_OUT_DIR}/${MACH}/time-${CASE}
-            mkdir -p ${RESOUT}
-            mkdir -p ${TIMEOUT}
-
             INPUT_DIR=/home/input/${CASE}
             OUTPUT_DIR=/home/output/${MACH}/res-${CASE}
             PDB=${INPUT_DIR}/${PDBF}
             MAP=${INPUT_DIR}/${MAPF}
-            echo "-> Input files: ${PDB} ${MAP} Resolution: ${RESOL}"
-            DOCK_RUN="${EXEC} run ${DOCK_OPT} ${DOCK_NAME}"
 
+            mkdir -p ${RESOUT}
+            mkdir -p ${TIMEOUT}
+            echo "-> Input files: ${PDB} ${MAP} Resolution: ${RESOL}"
             for i in `seq -w ${NRUNS}`
             do
               TAG="ang-${ANG}-type-${TAG_TYPE}-n-${i}"
@@ -191,14 +179,10 @@ do
 
               if [ ${EXEC} = "docker" ]
               then
-                docker rm `docker ps -aq`
-              fi
-
-              if [ ${EXEC} = "udocker" ]
-              then
-                udocker rm `udocker ps|cut -d" " -f 1|grep -v CONTAINER`
+                docker rm ${CONT_NAME}
               fi
             done
         done
+        udocker rm ${CONT_NAME}
     done
 done

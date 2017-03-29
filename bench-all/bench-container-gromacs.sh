@@ -36,11 +36,12 @@ TIME_STR="%e"
 DOCK_NVD="--device=/dev/nvidia0:/dev/nvidia0 \
           --device=/dev/nvidiactl:/dev/nvidiactl \
           --device=/dev/nvidia-uvm:/dev/nvidia-uvm"
+CONT_NAME=gromacs
 
 for OS in "C7" "U16"
 do
 
-    # Haddock Disvis and Powerfit
+    # Gromacs
     if [ ${OS} = "C7" ]
     then
         DOCK_NAME=gromacs-centos7-b5
@@ -54,35 +55,33 @@ do
     for EXEC in "docker" "udocker"
     do
 
-        if [ ${EXEC} = "docker" ]
-        then
-            MACH="Dock-${OS}-${NVIDIA}"
-        fi
-
-        if [ ${EXEC} = "udocker" ]
-        then
-            MACH="UDock-${OS}-${NVIDIA}"
-        fi
-
-
         VDIR="-v ${ROOT_INPUT_DIR}:/home/input -v ${R_OUT_DIR}:/home/output"
         DOCK_OPT="${VDIR}"
 
         if [ ${EXEC} = "docker" ]
         then
-          DOCK_OPT="${DOCK_NVD} ${VDIR}"
+            MACH="Dock-${OS}-${NVIDIA}"
+            DOCK_OPT="${DOCK_NVD} ${VDIR}"
+            DOCK_RUN="${EXEC} run ${DOCK_OPT} --name ${CONT_NAME} ${DOCK_NAME}"
+        fi
+
+        if [ ${EXEC} = "udocker" ]
+        then
+            MACH="UDock-${OS}-${NVIDIA}"
+            ${EXEC} create ${DOCK_OPT} --name=${CONT_NAME} ${DOCK_NAME}
+            DOCK_RUN="${EXEC} run ${CONT_NAME}"
         fi
 
         CASE="gromacs"
         RESOUT=${R_OUT_DIR}/${MACH}/res-${CASE}
         TIMEOUT=${T_OUT_DIR}/${MACH}/time-${CASE}
+        INPUT_DIR=/home/input/${CASE}
+        OUTPUT_DIR=/home/output/${MACH}/res-${CASE}
+        INFILE=${INPUT_DIR}/md.tpr
+
         mkdir -p ${RESOUT}
         mkdir -p ${TIMEOUT}
-
-        INFILE=/home/input/${CASE}/md.tpr
-        OUTPUT_DIR=/home/output/${MACH}/res-${CASE}
-        DOCK_RUN="${EXEC} run ${DOCK_OPT} ${DOCK_NAME}"
-
+        echo "-> Input files: ${PDB1} ${PDB2} ${REST}"
         for i in `seq -w ${NRUNS}`
         do
           TAG="n-${i}"
@@ -95,6 +94,11 @@ do
           echo     "${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} gmx mdrun -s ${INFILE} -ntomp 8 -gpu_id 0"
           echo
           ${TIME} -f "${TIME_STR}" -o ${TIME_RES} ${DOCK_RUN} gmx mdrun -s ${INFILE} -ntomp 8 -gpu_id 0
+          if [ ${EXEC} = "docker" ]
+          then
+            docker rm ${CONT_NAME}
+          fi
         done
+        udocker rm ${CONT_NAME}
     done
 done
