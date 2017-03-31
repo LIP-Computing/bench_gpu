@@ -66,8 +66,8 @@ do
         if [ ${EXEC} = "udocker" ]
         then
             MACH="UDock-${OS}-${NVIDIA}"
-            ${EXEC} create ${DOCK_OPT} --name=${CONT_NAME} ${DOCK_NAME}
-            DOCK_RUN="${EXEC} run ${CONT_NAME}"
+            ${EXEC} create --name=${CONT_NAME} ${DOCK_NAME}
+            DOCK_RUN="${EXEC} run ${DOCK_OPT} ${CONT_NAME}"
         fi
 
         #TYPE is either -g for GPU or -p NN for CPU NN processes
