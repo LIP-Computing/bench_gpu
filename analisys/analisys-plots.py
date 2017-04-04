@@ -57,8 +57,8 @@ def is_outlier(points, thresh=3.5):
 
 if __name__ == '__main__':
 
-    root_dir = "/home/david/Dropbox/AA-work/bench-run4"
-    fout = root_dir + "/bench.hdf"
+    root_dir = "/home/david/Dropbox/AA-work/bench-run5/time"
+    fout = root_dir + "/bench5.hdf"
     haddocks = ['disvis', 'powerfit']
     cases = {'disvis': ['RNA-polymerase-II', 'PRE5-PUP2-complex'],
              'powerfit': ['GroEL-GroES', 'RsgA-ribosome']}
@@ -76,7 +76,9 @@ if __name__ == '__main__':
     machshort = {'QK5200': ['Phys-C7', 'Dock-C7', 'Dock-U16', 'UDock-C7', 'UDock-U16'],
                  'TK40': ['VM-U16', 'Dock-C7', 'Dock-U16', 'UDock-C7', 'UDock-U16']}
 
-    lrunsG = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
+    lrunsG = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
+              '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
+    nruns = len(lrunsG)
     initName = 'time-'
 
     nbars = 5
@@ -96,7 +98,7 @@ if __name__ == '__main__':
                                        case + '-' + angle + '-' + vs + '/' +\
                                        nv + '/' + mach
                             grp1 = f.create_group(grp_name)
-                            npres = np.arange(10, dtype=float)
+                            npres = np.arange(nruns, dtype=float)
                             for n in lrunsG:
                                 tr_file = root_dir + os.sep + mach + os.sep + \
                                           initName + case + os.sep + 'tr_ang-' + angle + \
@@ -136,7 +138,7 @@ if __name__ == '__main__':
                         plt.xticks(index, machshort[nv])
                         plt.grid(b=None, which='major', axis='y')
                         plt.legend()
-                        plt.savefig(root_dir + '/plots/' + 'disvis ' + case + '-' + angle + '-' + vs + '-' + nv + '.png')
+                        plt.savefig(root_dir + '/plots/' + 'disvis-' + case + '-' + angle + '-' + vs + '-' + nv + '.png')
                         plt.close(fig)
 
                         # ratio of run time of machine with the runtime of the baremetal (Phys or VM)
@@ -163,7 +165,7 @@ if __name__ == '__main__':
                         plt.grid(b=None, which='major', axis='y')
                         plt.axhline(y=1.0, color='b', linestyle='-')
                         plt.legend()
-                        plt.savefig(root_dir + '/plots/' + 'ratio-disvis ' +
+                        plt.savefig(root_dir + '/plots/' + 'ratio-disvis' +
                                     case + '-' + angle + '-' + vs + '-' + nv + '.png')
                         plt.close(fig)
 
@@ -174,7 +176,7 @@ if __name__ == '__main__':
                 for mach in machs[nv]:
                     grp_name = 'powerfit' + '/' + case + '/' + nv + '/' + mach
                     grp1 = f.create_group(grp_name)
-                    npres = np.arange(10, dtype=float)
+                    npres = np.arange(nruns, dtype=float)
                     for n in lrunsG:
                         tr_file = root_dir + os.sep + mach + os.sep + initName + case + os.sep + 'tr_ang-4.71' + \
                                   '-type-GPU' + '-n-' + n + '.txt'
@@ -212,7 +214,7 @@ if __name__ == '__main__':
                 plt.xticks(index, machshort[nv])
                 plt.grid(b=None, which='major', axis='y')
                 plt.legend()
-                plt.savefig(root_dir + '/plots/' + 'powerfit ' + case + '-' + nv + '.png')
+                plt.savefig(root_dir + '/plots/' + 'powerfit-' + case + '-' + nv + '.png')
                 plt.close(fig)
 
                 # ratio of run time of machine with the runtime of the baremetal (Phys or VM)
@@ -238,5 +240,79 @@ if __name__ == '__main__':
                 plt.grid(b=None, which='major', axis='y')
                 plt.axhline(y=1.0, color='b', linestyle='-')
                 plt.legend()
-                plt.savefig(root_dir + '/plots/' + 'ratio-powerfit ' + case + '-' + nv + '.png')
+                plt.savefig(root_dir + '/plots/' + 'ratio-powerfit' + case + '-' + nv + '.png')
                 plt.close(fig)
+
+        case = 'gromacs'
+        for nv in nvidia:
+            list_mean = []
+            list_stdev = []
+            for mach in machs[nv]:
+                grp_name = case + '/' + nv + '/' + mach
+                grp1 = f.create_group(grp_name)
+                npres = np.arange(nruns, dtype=float)
+                for n in lrunsG:
+                    tr_file = root_dir + os.sep + mach + os.sep + initName + case + os.sep + 'tr_n-' + \
+                              n + '.txt'
+                    try:
+                        fraw = open(tr_file)
+                        npres[int(n) - 1] = float(fraw.readline())
+                    except IOError:
+                        print 'Cannot open', tr_file
+                
+                npres.sort()
+                outl_mask = is_outlier(npres, 3.5)
+                npres_ma = ma.masked_array(npres, mask=outl_mask)
+                res = grp1.create_dataset("runtime", data=npres)
+                res.attrs['mean'] = np.mean(npres)
+                res.attrs['stdev'] = np.std(npres)
+                res.attrs['mean_mask'] = np.mean(npres_ma)
+                res.attrs['stdev_mask'] = np.std(npres_ma)
+                res.attrs['n_masked'] = np.sum(outl_mask)
+                list_mean.append(np.mean(npres_ma))
+                list_stdev.append(np.std(npres_ma))
+            
+            ymin = np.amin(list_mean) - 1.5 * np.amax(list_stdev)
+            ymax = np.amax(list_mean) + 1.5 * np.amax(list_stdev)
+            fig = plt.figure()
+            plt.bar(index, list_mean, bar_width,
+                    color=['#8DADC0', '#ECBDA3', '#ECBDA3', '#ECBDA3', '#ECBDA3'],
+                    yerr=list_stdev,
+                    error_kw=error_config,
+                    label='Time (s)')
+            
+            plt.xlabel('Machine')
+            plt.ylabel('Run time (sec)')
+            plt.ylim((ymin, ymax))
+            plt.title('Case = ' + case + '\n GPU = ' + nv)
+            plt.xticks(index, machshort[nv])
+            plt.grid(b=None, which='major', axis='y')
+            plt.legend()
+            plt.savefig(root_dir + '/plots/' + case + '-' + nv + '.png')
+            plt.close(fig)
+            
+            # ratio of run time of machine with the runtime of the baremetal (Phys or VM)
+            r_baremetal = list_mean / list_mean[0]
+            stdev_ratio = []
+            for i in range(len(list_mean)):
+                stdr = std_ratio(list_mean[i], list_mean[0], list_stdev[i], list_stdev[0])
+                stdev_ratio.append(stdr)
+            ymin = np.amin(r_baremetal) - 1.5 * np.amax(stdev_ratio)
+            ymax = np.amax(r_baremetal) + 1.5 * np.amax(stdev_ratio)
+            fig = plt.figure()
+            plt.bar(index, r_baremetal, bar_width,
+                    color=['#8DADC0', '#ECBDA3', '#ECBDA3', '#ECBDA3', '#ECBDA3'],
+                    yerr=stdev_ratio,
+                    error_kw=error_config,
+                    label='Ratio')
+            
+            plt.xlabel('Machine')
+            plt.ylabel('Ratio Run time')
+            plt.ylim((ymin, ymax))
+            plt.title('Case = ' + case + '\n GPU = ' + nv)
+            plt.xticks(index, machshort[nv])
+            plt.grid(b=None, which='major', axis='y')
+            plt.axhline(y=1.0, color='b', linestyle='-')
+            plt.legend()
+            plt.savefig(root_dir + '/plots/' + 'ratio-' + case + '-' + nv + '.png')
+            plt.close(fig)
