@@ -66,15 +66,28 @@ if __name__ == '__main__':
     angles = ['5.0', '10.0']
     voxspac = ['1', '2']
     type = 'GPU'
-    nvidia = ['QK5200', 'TK40']
 
+#    nvidia = ['QK5200', 'TK40']
+#    machs = {'QK5200': ['Phys-C7-QK5200', 'Dock-C7-QK5200', 'Dock-U16-QK5200',
+#                        'UDockP!-C7-QK5200', 'UDockP!-U16-QK5200'],
+#             'TK40': ['VM-U16-TK40', 'Dock-C7-TK40', 'Dock-U16-TK40',
+#                      'UDockP1-C7-TK40', 'UDockP!-U16-TK40']}
+#    machshort = {'QK5200': ['Phys-C7', 'Dock-C7', 'Dock-U16', 'UDockP1-C7', 'UDockP1-U16'],
+#                 'TK40': ['VM-U16', 'Dock-C7', 'Dock-U16', 'UDockP1-C7', 'UDockP1-U16']}
+
+    nvidia = ['QK5200']
     machs = {'QK5200': ['Phys-C7-QK5200', 'Dock-C7-QK5200', 'Dock-U16-QK5200',
-                        'UDock-C7-QK5200', 'UDock-U16-QK5200'],
-             'TK40': ['VM-U16-TK40', 'Dock-C7-TK40', 'Dock-U16-TK40',
-                      'UDock-C7-TK40', 'UDock-U16-TK40']}
+                        'UDockP1-C7-QK5200', 'UDockP1-U16-QK5200']}
+    machshort = {'QK5200': ['Phys-C7', 'Dock-C7', 'Dock-U16', 'UDockP1-C7', 'UDockP1-U16']}
+    bar_col = ['#8DADC0', '#ECBDA3', '#ECBDA3', '#8DCCB2', '#8DCCB2']
 
-    machshort = {'QK5200': ['Phys-C7', 'Dock-C7', 'Dock-U16', 'UDock-C7', 'UDock-U16'],
-                 'TK40': ['VM-U16', 'Dock-C7', 'Dock-U16', 'UDock-C7', 'UDock-U16']}
+    machs_grom = {'QK5200': ['Phys-C7-QK5200', 'Dock-C7-QK5200', 'Dock-U16-QK5200',
+                             'UDockP1-C7-QK5200', 'UDockP1-U16-QK5200',
+                             'UDockF3-C7-QK5200', 'UDockF3-U16-QK5200']}
+    machshort_grom = {'QK5200': ['Phys-C7', 'Dock-C7', 'Dock-U16',
+                                 'UDockP1-C7', 'UDockP1-U16',
+                                 'UDockF3-C7', 'UDockF3-U16']}
+    bar_col_grom = ['#8DADC0', '#ECBDA3', '#ECBDA3', '#8DCCB2', '#8DCCB2', '#908DCC', '#908DCC']
 
     lrunsG = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
               '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
@@ -83,6 +96,8 @@ if __name__ == '__main__':
 
     nbars = 5
     index = np.arange(nbars)
+    nbars_grom = 7
+    index_grom = np.arange(nbars_grom)
     bar_width = 0.6
     error_config = {'ecolor': '#000000', 'lw': 2, 'capsize': 5, 'capthick': 2}
 
@@ -125,7 +140,7 @@ if __name__ == '__main__':
                         ymax = np.amax(list_mean) + 1.5*np.amax(list_stdev)
                         fig = plt.figure()
                         plt.bar(index, list_mean, bar_width,
-                                color=['#8DADC0', '#ECBDA3', '#ECBDA3', '#ECBDA3', '#ECBDA3'],
+                                color=bar_col,
                                 yerr=list_stdev,
                                 error_kw=error_config,
                                 label='Time (s)')
@@ -151,7 +166,7 @@ if __name__ == '__main__':
                         ymax = np.amax(r_baremetal) + 1.5 * np.amax(stdev_ratio)
                         fig = plt.figure()
                         plt.bar(index, r_baremetal, bar_width,
-                                color=['#8DADC0', '#ECBDA3', '#ECBDA3', '#ECBDA3', '#ECBDA3'],
+                                color=bar_col,
                                 yerr=stdev_ratio,
                                 error_kw=error_config,
                                 label='Ratio')
@@ -202,7 +217,7 @@ if __name__ == '__main__':
                 ymax = np.amax(list_mean) + 1.5*np.amax(list_stdev)
                 fig = plt.figure()
                 plt.bar(index, list_mean, bar_width,
-                        color=['#8DADC0', '#ECBDA3', '#ECBDA3', '#ECBDA3', '#ECBDA3'],
+                        color=bar_col,
                         yerr=list_stdev,
                         error_kw=error_config,
                         label='Time (s)')
@@ -227,7 +242,7 @@ if __name__ == '__main__':
                 ymax = np.amax(r_baremetal) + 1.5 * np.amax(stdev_ratio)
                 fig = plt.figure()
                 plt.bar(index, r_baremetal, bar_width,
-                        color=['#8DADC0', '#ECBDA3', '#ECBDA3', '#ECBDA3', '#ECBDA3'],
+                        color=bar_col,
                         yerr=stdev_ratio,
                         error_kw=error_config,
                         label='Ratio')
@@ -247,7 +262,7 @@ if __name__ == '__main__':
         for nv in nvidia:
             list_mean = []
             list_stdev = []
-            for mach in machs[nv]:
+            for mach in machs_grom[nv]:
                 grp_name = case + '/' + nv + '/' + mach
                 grp1 = f.create_group(grp_name)
                 npres = np.arange(nruns, dtype=float)
@@ -275,8 +290,8 @@ if __name__ == '__main__':
             ymin = np.amin(list_mean) - 1.5 * np.amax(list_stdev)
             ymax = np.amax(list_mean) + 1.5 * np.amax(list_stdev)
             fig = plt.figure()
-            plt.bar(index, list_mean, bar_width,
-                    color=['#8DADC0', '#ECBDA3', '#ECBDA3', '#ECBDA3', '#ECBDA3'],
+            plt.bar(index_grom, list_mean, bar_width,
+                    color=bar_col_grom,
                     yerr=list_stdev,
                     error_kw=error_config,
                     label='Time (s)')
@@ -285,7 +300,7 @@ if __name__ == '__main__':
             plt.ylabel('Run time (sec)')
             plt.ylim((ymin, ymax))
             plt.title('Case = ' + case + '\n GPU = ' + nv)
-            plt.xticks(index, machshort[nv])
+            plt.xticks(index_grom, machshort_grom[nv])
             plt.grid(b=None, which='major', axis='y')
             plt.legend()
             plt.savefig(root_dir + '/plots/' + case + '-' + nv + '.png')
@@ -300,8 +315,8 @@ if __name__ == '__main__':
             ymin = np.amin(r_baremetal) - 1.5 * np.amax(stdev_ratio)
             ymax = np.amax(r_baremetal) + 1.5 * np.amax(stdev_ratio)
             fig = plt.figure()
-            plt.bar(index, r_baremetal, bar_width,
-                    color=['#8DADC0', '#ECBDA3', '#ECBDA3', '#ECBDA3', '#ECBDA3'],
+            plt.bar(index_grom, r_baremetal, bar_width,
+                    color=bar_col_grom,
                     yerr=stdev_ratio,
                     error_kw=error_config,
                     label='Ratio')
@@ -310,7 +325,7 @@ if __name__ == '__main__':
             plt.ylabel('Ratio Run time')
             plt.ylim((ymin, ymax))
             plt.title('Case = ' + case + '\n GPU = ' + nv)
-            plt.xticks(index, machshort[nv])
+            plt.xticks(index_grom, machshort_grom[nv])
             plt.grid(b=None, which='major', axis='y')
             plt.axhline(y=1.0, color='b', linestyle='-')
             plt.legend()
