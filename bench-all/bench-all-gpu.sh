@@ -23,10 +23,10 @@
 # Number of runs of each type for statistical purposes
 NRUNS=20
 # This is for physical machines or VMs
-MACH=Phys-C7-QK5200
-#MACH=VM-U16-TK40
+#MACH=Phys-C7-QK5200
+MACH=VM-U16-QK5200
 
-ROOT_DIR=/cloud/root
+ROOT_DIR=/home/ubuntu
 
 ROOT_INPUT_DIR=${ROOT_DIR}/bench-input
 OUT_DIR=${ROOT_DIR}/bench-run5
