@@ -1,0 +1,20 @@
+# docker build -t tensorflow-1.4.1-gpu -f Dockerfile-tf141-gpu .
+FROM tensorflow/tensorflow:1.4.1-gpu
+LABEL maintainer="Mario David <mariojmdavid@gmail.com>"
+
+RUN apt-get update && apt-get install -y --no-install-recommends git wget && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install future && \
+    cd /home && \
+    git clone https://github.com/vykozlov/tf-benchmarks && \
+    mkdir -p /home/mnist/input_data && \
+    cd /home/mnist/input_data && \
+    wget https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz && \
+    wget https://storage.googleapis.com/cvdf-datasets/mnist/train-labels-idx1-ubyte.gz && \
+    wget https://storage.googleapis.com/cvdf-datasets/mnist/t10k-images-idx3-ubyte.gz && \
+    wget https://storage.googleapis.com/cvdf-datasets/mnist/t10k-labels-idx1-ubyte.gz
+
+COPY run-bench.sh /home/tf-benchmarks/
+WORKDIR /home/tf-benchmarks
+
