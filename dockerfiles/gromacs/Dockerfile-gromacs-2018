@@ -1,0 +1,47 @@
+# docker build -t gromacs-2018.1-cuda91 -f Dockerfile-gromacs-2018 .
+FROM nvidia/cuda:9.1-devel-ubuntu16.04
+LABEL maintainer "Mario David <mariojmdavid@gmail.com>"
+
+ENV GROMACS_DIR /usr/local/gromacs
+ENV GROMACS_VER 2018.1
+ENV GMXBIN $GROMACS_DIR/bin
+ENV GMXDATA $GROMACS_DIR/share/gromacs
+ENV GMXLDLIB $GROMACS_DIR/lib
+ENV GMXMAN $GROMACS_DIR/share/man
+ENV PATH $GMXBIN:/usr/local/cuda/bin:$PATH
+ENV LD_LIBRARY_PATH $GMXLDLIB:/usr/local/cuda/lib64:/usr/local/lib64
+ENV MANPATH $GMXMAN:$MANPATH
+ENV PKG_CONFIG_PATH $GMXLDLIB/pkgconfig:$PKG_CONFIG_PATH
+ENV CXX "/usr/bin/g++"
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        cmake \
+        libatlas-dev \
+        libboost-all-dev \
+        libffi-dev \
+        libfreetype6-dev \
+        liblapack-dev \
+        pkg-config \
+        python \
+        python-dev \
+        software-properties-common \
+        tar \
+        time \
+        wget && \
+    apt-get clean && \
+    cd /tmp && \
+    wget http://ftp.gromacs.org/pub/gromacs/gromacs-${GROMACS_VER}.tar.gz && \
+    tar zxvf gromacs-${GROMACS_VER}.tar.gz && \
+    cd gromacs-${GROMACS_VER} && \
+    mkdir build && \
+    cd build && \
+    cmake .. -DGMX_BUILD_OWN_FFTW=ON -DGMX_GPU=on && \
+    make && \
+    make install && \
+    rm -rf /tmp/gromacs* /var/lib/apt/lists/* && \
+    cd /home && \
+    wget http://www.lip.pt/~david/md.tpr
+
+WORKDIR /home
+
