@@ -1,0 +1,16 @@
+# docker build -t openqcd-1.6 -f Dockerfile-openqcd-1.6 .
+FROM centos:centos7
+
+RUN yum -y groupinstall "Development Tools"
+RUN yum -y install \
+    wget \
+    which \
+    gsl* \
+    gmp* \
+    openmpi*
+
+RUN cd /opt && \
+    wget http://luscher.web.cern.ch/luscher/openQCD/openQCD-1.6.tar.gz && \
+    tar xzvf openQCD-1.6.tar.gz && \
+
+
