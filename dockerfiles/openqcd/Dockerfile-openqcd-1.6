@@ -1,16 +1,27 @@
 # docker build -t openqcd-1.6 -f Dockerfile-openqcd-1.6 .
 FROM centos:centos7
 
+ENV GCC=gcc
+ENV MPI_HOME=/usr/lib64/openmpi
+ENV MPI_INCLUDE=/usr/include/openmpi-x86_64
+ENV PATH=$PATH:$MPI_HOME/bin:/opt/openQCD-1.6/main
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MPI_HOME/lib:$MPI_HOME/lib/openmpi
+
 RUN yum -y groupinstall "Development Tools"
 RUN yum -y install \
-    wget \
-    which \
-    gsl* \
-    gmp* \
-    openmpi*
+      gmp* \
+      gsl* \
+      openmpi* \
+      wget \
+      which
 
 RUN cd /opt && \
     wget http://luscher.web.cern.ch/luscher/openQCD/openQCD-1.6.tar.gz && \
     tar xzvf openQCD-1.6.tar.gz && \
+    cd /opt/openQCD-1.6/main && \
+    make ym1 && \
+    mkdir -p /home/ym1/log /home/ym1/dat /home/ym1/cnfg
 
+COPY ym1.in /home/ym1.in
+WORKDIR /home
 
